@@ -18,10 +18,10 @@ package org.dimitrovchi.enumlike.mm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.dimitrovchi.enumlike.collections.TypedMap;
 import org.dimitrovchi.enumlike.data.HashEnumMap;
 import org.dimitrovchi.enumlike.data.IdentityEnumMap;
+import org.dimitrovchi.enumlike.data.SkipListEnumMap;
 import org.dimitrovchi.enumlike.data.TestCommonsEnumMapKey;
 import org.dimitrovchi.enumlike.data.TreeEnumMap;
 import org.github.jamm.MemoryMeter;
@@ -38,22 +38,33 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class TypedMapMemoryTest {
 
-    private static final AtomicInteger COUNTER = new AtomicInteger();
+    private static final List<String> KEYS = new ArrayList<>(System.getProperties().stringPropertyNames());
+    private static final List<TestCommonsEnumMapKey<Long>> TYPED_KEYS = new ArrayList<>();
+    
+    static {
+        final int delta = 1024 - KEYS.size();
+        for (int i = 0; i < delta; i++) {
+            KEYS.add(KEYS.get(i % KEYS.size()) + "_" + "key_" + Math.pow(i, 3));
+        }
+        for (final String key : KEYS) {
+            TYPED_KEYS.add(new TestCommonsEnumMapKey<>(key, Long.class, 100L));
+        }
+    }
 
     private final MemoryMeter memory = new MemoryMeter();
     private final TypedMap map;
     private final int capacity;
     private final int size;
-    private final List<String> keys = new ArrayList<>(System.getProperties().stringPropertyNames());
-
+    
     @Parameterized.Parameters
     public static Collection<Object[]> parameters() {
         final List<Object[]> parameters = new ArrayList<>();
-        for (final int capacity : new int[] {16, 32, 64, 128, 256}) {
-            for (final int size : new int[] {2, 4, 8, 16, 32, 64, 128, 256, 512, 3, 5, 10, 55, 300}) {
+        for (final int size : new int[] {2, 3, 4, 5, 8, 16, 32, 64, 100, 270}) {
+            for (final int capacity : new int[] {16, 32, 64, 128}) {
                 parameters.add(new Object[] {new HashEnumMap(capacity), capacity, size});
                 parameters.add(new Object[] {new IdentityEnumMap(capacity), capacity, size});
                 parameters.add(new Object[] {new TreeEnumMap(), capacity, size});
+                parameters.add(new Object[] {new SkipListEnumMap(), capacity, size});
             }
         }
         return parameters;
@@ -63,13 +74,6 @@ public class TypedMapMemoryTest {
         this.map = map;
         this.capacity = capacity;
         this.size = size;
-        for (int i = 0; i < keys.size(); i++) {
-            keys.set(i, keys.get(i) + "_" + capacity + "_" + size + "_" + COUNTER.getAndIncrement());
-        }
-        final int delta = size - keys.size();
-        for (int i = 0; i < delta; i++) {
-            keys.add(map.getClass().getCanonicalName() + "_" + capacity + "_" + size + "_" + i);
-        }
     }
     
     @BeforeClass
@@ -80,7 +84,7 @@ public class TypedMapMemoryTest {
     @Test
     public void testMapMemoryConsumption() {
         for (int i = 0; i < size; i++) {
-            map.put(new TestCommonsEnumMapKey<>(keys.get(i), Long.class, 100L), 300L);
+            map.put(TYPED_KEYS.get(i), 300L);
         }
         System.out.printf("%s\t%d\t%d\t%d%n", 
                 map.getClass().getSimpleName(), 
