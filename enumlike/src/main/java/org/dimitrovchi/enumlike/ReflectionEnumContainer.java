@@ -35,7 +35,7 @@ public class ReflectionEnumContainer<E extends Enum> implements EnumContainer<E>
     private final Class<E> enumClass;
     private final int maxOrdinal;
     
-    public ReflectionEnumContainer(Class<E> enumClass, @Nonnull Class<?>... containerClasses) {
+    public ReflectionEnumContainer(@Nonnull Class<E> enumClass, @Nonnull Class<?>... containerClasses) {
         this.enumClass = enumClass;
         final List<E> enumList = new ArrayList<>();
         for (final Class<?> c : containerClasses) {

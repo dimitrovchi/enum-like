@@ -34,18 +34,13 @@ public class EnumMapKeyTest {
 
     @Test
     public void testOrdinals() {
-        final List<String> expectedList = Arrays.asList(
-                TestEnumKeys2.KEY1.name(),
-                TestEnumKeys2.KEY2.name(),
-                TestEnumKeys2.KEY3.name()
-        );
-        final TestKey[] enums = Enum.enumInstances(TestKey.class);
+        final TestKey[] enums = {TestEnumKeys2.KEY1, TestEnumKeys2.KEY2, TestEnumKeys2.KEY3};
         final List<String> keyNames = new ArrayList<>();
         for (final TestKey<?> key : enums) {
             keyNames.add(key.name());
         }
         Collections.sort(keyNames);
-        Assert.assertEquals(expectedList, keyNames);
+        Assert.assertEquals(Arrays.asList("KEY1", "KEY2", "KEY3"), keyNames);
     }
 
     interface TestEnumKeys {

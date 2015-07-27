@@ -15,11 +15,9 @@
  */
 package org.dimitrovchi.enumlike;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 
 /**
@@ -30,10 +28,10 @@ import javax.annotation.Nonnull;
 public abstract class Enum {
 
     private static final ClassResolver CLASS_RESOLVER = new ClassResolver();
-    private static final ClassValue<List<Enum>> ENUMS = new ClassValue<List<Enum>>() {
+    private static final ClassValue<AtomicInteger> ENUM_COUNTER = new ClassValue<AtomicInteger>() {
         @Override
-        protected List<Enum> computeValue(Class<?> type) {
-            return new ArrayList<>();
+        protected AtomicInteger computeValue(Class<?> type) {
+            return new AtomicInteger();
         }
     };
 
@@ -51,11 +49,7 @@ public abstract class Enum {
             }
         }
         caller = c;
-        final List<Enum> enums = ENUMS.get(getEnumClass());
-        synchronized (enums) {
-            ordinal = enums.size();
-            enums.add((Enum) this);
-        }
+        ordinal = ENUM_COUNTER.get(getEnumClass()).getAndIncrement();
     }
 
     /**
@@ -118,26 +112,6 @@ public abstract class Enum {
     @Override
     public String toString() {
         return name();
-    }
-
-    /**
-     * Enumerate enum instances.
-     *
-     * @param <T> Enum type.
-     * @param enumClass Enum class.
-     * @return Enum instances.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T extends Enum> T[] enumInstances(@Nonnull Class<T> enumClass) {
-        final List<Enum> enums = ENUMS.get(enumClass);
-        final T[] array;
-        synchronized (enums) {
-            array = (T[]) Array.newInstance(enumClass, enums.size());
-            for (int i = 0; i < array.length; i++) {
-                array[i] = (T) enums.get(i);
-            }
-        }
-        return array;
     }
 
     private static class ClassResolver extends SecurityManager {

@@ -39,6 +39,7 @@ public interface EnumContainer<E extends Enum> {
      * 
      * @return Enum class.
      */
+    @Nonnull
     Class<E> getEnumClass();
     
     /**
