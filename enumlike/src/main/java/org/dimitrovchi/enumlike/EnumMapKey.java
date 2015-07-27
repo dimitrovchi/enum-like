@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dimitrovchi.enumlike.collections;
+package org.dimitrovchi.enumlike;
 
+import org.dimitrovchi.enumlike.base.DefaultValueSupplier;
+import org.dimitrovchi.enumlike.base.DefaultValue;
+import org.dimitrovchi.enumlike.base.TypedKey;
 import javax.annotation.Nonnull;
-import org.dimitrovchi.enumlike.Enum;
 
 /**
  * Enum-like map key.
@@ -25,7 +27,7 @@ import org.dimitrovchi.enumlike.Enum;
  * 
  * @author Dmitry Ovchinnikov
  */
-public abstract class AbstractEnumMapKey<V> extends Enum implements TypedKey<V> {
+public abstract class EnumMapKey<V> extends Enum implements TypedKey<V> {
     
     private final Class<V> type;
     private final DefaultValueSupplier<V> defaultValueSupplier;
@@ -36,7 +38,7 @@ public abstract class AbstractEnumMapKey<V> extends Enum implements TypedKey<V> 
      * @param type Value type.
      * @param defaultValueSupplier Default value supplier.
      */
-    public AbstractEnumMapKey(@Nonnull Class<V> type, @Nonnull DefaultValueSupplier<V> defaultValueSupplier) {
+    public EnumMapKey(@Nonnull Class<V> type, @Nonnull DefaultValueSupplier<V> defaultValueSupplier) {
         this.type = type;
         this.defaultValueSupplier = defaultValueSupplier;
     }
@@ -46,7 +48,7 @@ public abstract class AbstractEnumMapKey<V> extends Enum implements TypedKey<V> 
      * 
      * @param valueType Value type.
      */
-    public AbstractEnumMapKey(@Nonnull Class<V> valueType) {
+    public EnumMapKey(@Nonnull Class<V> valueType) {
         this(valueType, DefaultValue.<V>nullValueSupplier());
     }
 

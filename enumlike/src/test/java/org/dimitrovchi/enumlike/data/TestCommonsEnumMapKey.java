@@ -16,9 +16,9 @@
 package org.dimitrovchi.enumlike.data;
 
 import org.apache.commons.lang.enums.Enum;
-import org.dimitrovchi.enumlike.collections.DefaultValue;
-import org.dimitrovchi.enumlike.collections.DefaultValueSupplier;
-import org.dimitrovchi.enumlike.collections.TypedKey;
+import org.dimitrovchi.enumlike.base.DefaultValue;
+import org.dimitrovchi.enumlike.base.DefaultValueSupplier;
+import org.dimitrovchi.enumlike.base.TypedKey;
 
 /**
  * Commons enum map test key.

@@ -13,38 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dimitrovchi.enumlike;
-
-import java.util.List;
-import javax.annotation.Nonnull;
+package org.dimitrovchi.enumlike.base;
 
 /**
- * Enum provider.
+ * Typed key.
  * 
- * @param <E> Enum type.
+ * @param <V> Value type.
  * 
  * @author Dmitry Ovchinnikov
  */
-public interface EnumContainer<E extends Enum> {
-        
-    /**
-     * Get all enums for this container.
-     * @return All the enum instances for this container.
-     */
-    @Nonnull
-    List<E> getElements();
+public interface TypedKey<V> {
     
     /**
-     * Get the enum class.
-     * 
-     * @return Enum class.
+     * Get key name.
+     * @return Key name.
      */
-    @Nonnull
-    Class<E> getElementClass();
+    String name();
     
     /**
-     * Get maximum ordinal.
-     * @return Maximum ordinal.
+     * Get key value type.
+     * @return Key value type.
      */
-    int getMaxOrdinal();
+    Class<V> getType();
+    
+    /**
+     * Get default value supplier.
+     * @return Default value supplier.
+     */
+    DefaultValueSupplier<V> getDefaultValueSupplier();
 }

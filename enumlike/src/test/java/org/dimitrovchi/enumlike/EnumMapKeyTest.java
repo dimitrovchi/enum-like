@@ -15,13 +15,12 @@
  */
 package org.dimitrovchi.enumlike;
 
-import org.dimitrovchi.enumlike.collections.AbstractEnumMapKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.dimitrovchi.enumlike.collections.DefaultValue;
-import org.dimitrovchi.enumlike.collections.DefaultValueSupplier;
+import org.dimitrovchi.enumlike.base.DefaultValue;
+import org.dimitrovchi.enumlike.base.DefaultValueSupplier;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -54,7 +53,7 @@ public class EnumMapKeyTest {
         TestKey<String> KEY3 = new TestKey<>(String.class);
     }
 
-    private static class TestKey<V> extends AbstractEnumMapKey<V> {
+    private static class TestKey<V> extends EnumMapKey<V> {
 
         public TestKey(Class<V> valueType, DefaultValueSupplier<V> defaultValueSupplier) {
             super(valueType, defaultValueSupplier);

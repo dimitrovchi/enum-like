@@ -23,19 +23,19 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 /**
- * Reflection-based enum provider.
+ * Reflection-based enum container.
  * 
  * @param <E> Enum type.
  * 
  * @author Dmitry Ovchinnikov
  */
-public class ReflectionEnumContainer<E extends Enum> implements EnumContainer<E> {
+public class DefaultEnumContainer<E extends Enum> implements EnumContainer<E> {
     
     private final List<E> enums;
     private final Class<E> enumClass;
     private final int maxOrdinal;
     
-    public ReflectionEnumContainer(@Nonnull Class<E> enumClass, @Nonnull Class<?>... containerClasses) {
+    public DefaultEnumContainer(@Nonnull Class<E> enumClass, @Nonnull Class<?>... containerClasses) {
         this.enumClass = enumClass;
         final List<E> enumList = new ArrayList<>();
         for (final Class<?> c : containerClasses) {
@@ -63,12 +63,12 @@ public class ReflectionEnumContainer<E extends Enum> implements EnumContainer<E>
     }
 
     @Override
-    public List<E> getEnums() {
+    public List<E> getElements() {
         return enums;
     }
 
     @Override
-    public Class<E> getEnumClass() {
+    public Class<E> getElementClass() {
         return enumClass;
     }
 

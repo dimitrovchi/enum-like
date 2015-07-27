@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dimitrovchi.enumlike.data;
+package org.dimitrovchi.enumlike.collections;
 
 import java.util.Collection;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.dimitrovchi.enumlike.collections.TypedKey;
-import org.dimitrovchi.enumlike.collections.TypedMap;
+import org.dimitrovchi.enumlike.base.TypedKey;
+import org.dimitrovchi.enumlike.base.TypedMap;
 
 /**
- * IdentityHashMap-based enum-map emulation.
+ * HashMap-based enum-map like emulation.
  * 
  * @author Dmitry Ovchinnikov
  */
-public class IdTypedMap implements TypedMap {
+public class HashTypedMap implements TypedMap {
     
     private final Map<TypedKey<?>, Object> map;
-
-    public IdTypedMap(int capacity) {
-        map = new IdentityHashMap<>(capacity);
+    
+    public HashTypedMap(int capacity) {
+        map = new HashMap<>(capacity);
     }
 
     @Override
@@ -71,17 +71,7 @@ public class IdTypedMap implements TypedMap {
     }
 
     @Override
-    public Set<TypedKey<?>> keySet() {
-        return map.keySet();
-    }
-
-    @Override
-    public Collection<?> values() {
-        return map.values();
-    }
-
-    @Override
-    public Set<? extends Map.Entry<? extends TypedKey<?>, ?>> entrySet() {
-        return map.entrySet();
+    public Map<? extends TypedKey<?>, ?> toMap() {
+        return map;
     }
 }

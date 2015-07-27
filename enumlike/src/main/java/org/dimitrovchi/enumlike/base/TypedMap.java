@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dimitrovchi.enumlike.collections;
+package org.dimitrovchi.enumlike.base;
 
-import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Typed map.
@@ -40,9 +38,5 @@ public interface TypedMap {
     
     int size();
     
-    Set<? extends TypedKey<?>> keySet();
-    
-    Collection<?> values();
-    
-    Set<? extends Map.Entry<? extends TypedKey<?>, ?>> entrySet();
+    Map<? extends TypedKey<?>, ?> toMap();
 }

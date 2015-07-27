@@ -15,36 +15,15 @@
  */
 package org.dimitrovchi.enumlike;
 
-import java.util.List;
-import javax.annotation.Nonnull;
+import org.dimitrovchi.enumlike.base.TypedKeyContainer;
 
 /**
- * Enum provider.
+ * Enum map key container.
  * 
- * @param <E> Enum type.
+ * @param <E> Enum key type.
  * 
  * @author Dmitry Ovchinnikov
  */
-public interface EnumContainer<E extends Enum> {
-        
-    /**
-     * Get all enums for this container.
-     * @return All the enum instances for this container.
-     */
-    @Nonnull
-    List<E> getElements();
+public interface EnumMapKeyContainer<E extends EnumMapKey<?>> extends EnumContainer<E>, TypedKeyContainer<E> {
     
-    /**
-     * Get the enum class.
-     * 
-     * @return Enum class.
-     */
-    @Nonnull
-    Class<E> getElementClass();
-    
-    /**
-     * Get maximum ordinal.
-     * @return Maximum ordinal.
-     */
-    int getMaxOrdinal();
 }

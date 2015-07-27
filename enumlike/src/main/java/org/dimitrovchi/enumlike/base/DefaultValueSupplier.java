@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dimitrovchi.enumlike.collections;
+package org.dimitrovchi.enumlike.base;
 
 /**
  * Default value supplier.
