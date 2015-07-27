@@ -16,26 +16,34 @@
 package org.dimitrovchi.enumlike;
 
 import java.util.List;
-import java.util.ServiceLoader;
 import javax.annotation.Nonnull;
 
 /**
  * Enum provider.
  * 
+ * @param <E> Enum type.
+ * 
  * @author Dmitry Ovchinnikov
  */
-public abstract class EnumProvider {
-        
-    static {
-        for (final EnumProvider enumProvider : ServiceLoader.load(EnumProvider.class)) {
-            enumProvider.listEnums(); // initialize enum instances explicitly
-        }
-    }
+public interface EnumContainer<E extends Enum> {
         
     /**
      * Lists all enums for this provider.
      * @return All the enum instances for this provider.
      */
     @Nonnull
-    protected abstract List<? extends Enum> listEnums();    
+    List<E> getEnums();
+    
+    /**
+     * Get the enum class.
+     * 
+     * @return Enum class.
+     */
+    Class<E> getEnumClass();
+    
+    /**
+     * Get maximum ordinal.
+     * @return Maximum ordinal.
+     */
+    int getMaxOrdinal();
 }

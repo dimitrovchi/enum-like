@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.dimitrovchi.enumlike.collections.TypedMap;
-import org.dimitrovchi.enumlike.data.HashEnumMap;
-import org.dimitrovchi.enumlike.data.IdentityEnumMap;
-import org.dimitrovchi.enumlike.data.SkipListEnumMap;
+import org.dimitrovchi.enumlike.data.HashTypedMap;
+import org.dimitrovchi.enumlike.data.IdTypedMap;
+import org.dimitrovchi.enumlike.data.SListTypedMap;
 import org.dimitrovchi.enumlike.data.TestCommonsEnumMapKey;
-import org.dimitrovchi.enumlike.data.TreeEnumMap;
+import org.dimitrovchi.enumlike.data.TreeTypedMap;
 import org.github.jamm.MemoryMeter;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -38,6 +38,10 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class TypedMapMemoryTest {
 
+    private static final MemoryMeter MEMORY = new MemoryMeter()
+            .ignoreKnownSingletons()
+            .ignoreNonStrongReferences()
+            .withGuessing(MemoryMeter.Guess.FALLBACK_UNSAFE);
     private static final List<String> KEYS = new ArrayList<>(System.getProperties().stringPropertyNames());
     private static final List<TestCommonsEnumMapKey<Long>> TYPED_KEYS = new ArrayList<>();
     
@@ -51,7 +55,6 @@ public class TypedMapMemoryTest {
         }
     }
 
-    private final MemoryMeter memory = new MemoryMeter();
     private final TypedMap map;
     private final int capacity;
     private final int size;
@@ -59,13 +62,13 @@ public class TypedMapMemoryTest {
     @Parameterized.Parameters
     public static Collection<Object[]> parameters() {
         final List<Object[]> parameters = new ArrayList<>();
-        for (final int size : new int[] {2, 3, 4, 5, 8, 16, 32, 64, 100, 270}) {
+        for (final int size : new int[] {2, 3, 4, 9, 16, 35, 100, 270}) {
             for (final int capacity : new int[] {16, 32, 64, 128}) {
-                parameters.add(new Object[] {new HashEnumMap(capacity), capacity, size});
-                parameters.add(new Object[] {new IdentityEnumMap(capacity), capacity, size});
-                parameters.add(new Object[] {new TreeEnumMap(), capacity, size});
-                parameters.add(new Object[] {new SkipListEnumMap(), capacity, size});
+                parameters.add(new Object[] {new HashTypedMap(capacity), capacity, size});
+                parameters.add(new Object[] {new IdTypedMap(capacity), capacity, size});
             }
+            parameters.add(new Object[] {new TreeTypedMap(), 0, size});
+            parameters.add(new Object[] {new SListTypedMap(), 0, size});
         }
         return parameters;
     }
@@ -90,6 +93,6 @@ public class TypedMapMemoryTest {
                 map.getClass().getSimpleName(), 
                 capacity, 
                 size, 
-                memory.measureDeep(map));
+                MEMORY.measureDeep(map));
     }
 }

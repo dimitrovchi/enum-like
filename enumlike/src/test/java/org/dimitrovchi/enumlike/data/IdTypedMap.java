@@ -27,11 +27,11 @@ import org.dimitrovchi.enumlike.collections.TypedMap;
  * 
  * @author Dmitry Ovchinnikov
  */
-public class IdentityEnumMap implements TypedMap {
+public class IdTypedMap implements TypedMap {
     
     private final Map<TypedKey<?>, Object> map;
 
-    public IdentityEnumMap(int capacity) {
+    public IdTypedMap(int capacity) {
         map = new IdentityHashMap<>(capacity);
     }
 

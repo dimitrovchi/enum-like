@@ -94,9 +94,16 @@ public abstract class Enum {
     }
 
     static boolean isEnumField(@Nonnull Field field, @Nonnull Class<? extends Enum> type) {
-        return (field.getModifiers()
-                & (Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL)) != 0
-                && type.isAssignableFrom(field.getType());
+        try {
+            if ((field.getModifiers() & (Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL)) != 0) {
+                final Enum e = (Enum) field.get(null);
+                return e != null && e.getEnumClass() == type;
+            } else {
+                return false;
+            }
+        } catch (ReflectiveOperationException x) {
+            return false;
+        }
     }
 
     /**

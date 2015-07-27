@@ -40,7 +40,7 @@ public interface TypedMap {
     
     int size();
     
-    Set<TypedKey<?>> keySet();
+    Set<? extends TypedKey<?>> keySet();
     
     Collection<?> values();
     

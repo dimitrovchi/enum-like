@@ -27,7 +27,7 @@ import org.dimitrovchi.enumlike.collections.TypedMap;
  * 
  * @author Dmitry Ovchinnikov
  */
-public class SkipListEnumMap implements TypedMap {
+public class SListTypedMap implements TypedMap {
     
     private final Map<TypedKey<?>, Object> map = new ConcurrentSkipListMap<>();
 

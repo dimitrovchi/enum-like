@@ -16,20 +16,24 @@
 package org.dimitrovchi.enumlike.data;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import org.dimitrovchi.enumlike.collections.TypedKey;
 import org.dimitrovchi.enumlike.collections.TypedMap;
 
 /**
- * Tree enum map.
+ * HashMap-based enum-map like emulation.
  * 
  * @author Dmitry Ovchinnikov
  */
-public class TreeEnumMap implements TypedMap {
+public class HashTypedMap implements TypedMap {
     
-    private final Map<TypedKey<?>, Object> map = new TreeMap<>();
+    private final Map<TypedKey<?>, Object> map;
+    
+    public HashTypedMap(int capacity) {
+        map = new HashMap<>(capacity);
+    }
 
     @Override
     public boolean containsKey(TypedKey<?> key) {
