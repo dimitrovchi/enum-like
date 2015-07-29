@@ -15,31 +15,20 @@
  */
 package org.dimitrovchi.enumlike;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReferenceArray;
-import org.dimitrovchi.enumlike.base.TypedKey;
-import org.dimitrovchi.enumlike.base.TypedMap;
 
 /**
  * Concurrent typed enum map.
  * 
  * @author Dmitry Ovchinnikov
  */
-public class ConcurrentTypedEnumMap implements TypedMap {
+public class ConcurrentTypedEnumMap extends AbstractArrayBasedTypedEnumMap {
     
     private final AtomicReferenceArray<Object> values;
-    private final EnumMapKeyContainer<? extends EnumMapKey<?>> enumContainer;
 
     public ConcurrentTypedEnumMap(EnumMapKeyContainer<? extends EnumMapKey<?>> enumContainer) {
-        this.enumContainer = enumContainer;
+        super(enumContainer);
         this.values = new AtomicReferenceArray<>(enumContainer.getMaxOrdinal() + 1);
-    }
-
-    @Override
-    public boolean containsKey(TypedKey<?> key) {
-        final EnumMapKey k = key(key);
-        return values.get(k.ordinal()) != null;
     }
 
     @Override
@@ -54,75 +43,17 @@ public class ConcurrentTypedEnumMap implements TypedMap {
     }
 
     @Override
-    public <K extends TypedKey<V>, V> V get(K key) {
-        final EnumMapKey k = key(key);
-        return key.getType().cast(getByKey(k));
+    protected int fullSize() {
+        return values.length();
     }
 
     @Override
-    public <K extends TypedKey<V>, V> V put(K key, V value) {
-        final EnumMapKey k = key(key);
-        final Object old = setByKey(k, value);
-        return key.getType().cast(old);
+    protected Object get(int ordinal) {
+        return values.get(ordinal);
     }
 
     @Override
-    public <K extends TypedKey<V>, V> V remove(K key) {
-        return put(key, null);
-    }
-
-    @Override
-    public void clear() {
-        for (int i = 0; i < values.length(); i++) {
-            values.set(i, null);
-        }
-    }
-
-    @Override
-    public int size() {
-        int size = 0;
-        for (int i = 0; i < values.length(); i++) {
-            if (values.get(i) != null) {
-                size++;
-            }
-        }
-        return size;
-    }
-
-    @Override
-    public Map<? extends TypedKey<?>, ?> toMap() {
-        final Map<TypedKey<?>, Object> map = new LinkedHashMap<>(values.length());
-        for (int i = 0; i < values.length(); i++) {
-            final Object v = values.get(i);
-            if (v != null) {
-                final EnumMapKey<?> k = enumContainer.getElements().get(i);
-                map.put(k, v);
-            }
-        }
-        return map;
-    }
-    
-    private EnumMapKey key(TypedKey<?> key) {
-        try {
-            return enumContainer.getElementClass().cast(key);
-        } catch (ClassCastException x) {
-            throw new IllegalArgumentException("Unknown key: " + key, x);
-        }
-    }
-
-    private Object getByKey(EnumMapKey key) {
-        try {
-            return values.get(key.ordinal());
-        } catch (ArrayIndexOutOfBoundsException x) {
-            throw new IllegalArgumentException("Unknown key: " + key, x);
-        }
-    }
-
-    private Object setByKey(EnumMapKey key, Object value) {
-        try {
-            return values.getAndSet(key.ordinal(), value);
-        } catch (ArrayIndexOutOfBoundsException x) {
-            throw new IllegalArgumentException("Unknown key: " + key, x);
-        }
+    protected Object set(int ordinal, Object value) {
+        return values.getAndSet(ordinal, value);
     }
 }
