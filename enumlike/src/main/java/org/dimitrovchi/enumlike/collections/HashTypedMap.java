@@ -15,10 +15,8 @@
  */
 package org.dimitrovchi.enumlike.collections;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import org.dimitrovchi.enumlike.base.TypedKey;
 import org.dimitrovchi.enumlike.base.TypedMap;
 

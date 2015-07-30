@@ -15,19 +15,23 @@
  */
 package org.dimitrovchi.enumlike.collections;
 
+import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentSkipListMap;
 import org.dimitrovchi.enumlike.base.TypedKey;
 import org.dimitrovchi.enumlike.base.TypedMap;
 
 /**
- * Skip-list map.
+ * IdentityHashMap-based enum-map emulation.
  * 
  * @author Dmitry Ovchinnikov
  */
-public class SListTypedMap implements TypedMap {
+public class IdentityHashTypedMap implements TypedMap {
     
-    private final Map<TypedKey<?>, Object> map = new ConcurrentSkipListMap<>();
+    private final Map<TypedKey<?>, Object> map;
+
+    public IdentityHashTypedMap(int capacity) {
+        map = new IdentityHashMap<>(capacity);
+    }
 
     @Override
     public boolean containsKey(TypedKey<?> key) {
