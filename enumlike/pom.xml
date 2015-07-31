@@ -60,16 +60,23 @@ limitations under the License.
         </dependency>
         
         <dependency>
-            <groupId>com.github.jbellis</groupId>
-            <artifactId>jamm</artifactId>
-            <version>0.3.1</version>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -113,33 +120,9 @@ limitations under the License.
                 <configuration>
                     <forkCount>1C</forkCount>
                     <reuseForks>false</reuseForks>
-                    <argLine>-javaagent:${project.build.directory}/jamm.jar</argLine>
                 </configuration>
             </plugin>
-            
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-                <executions>
-                    <execution>
-                        <id>copy-sizeof-agent</id>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <stripVersion>true</stripVersion>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>com.github.jbellis</groupId>
-                                    <artifactId>jamm</artifactId>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
+                        
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.4</version>
@@ -153,7 +136,31 @@ limitations under the License.
                     </execution>
                 </executions>
             </plugin>
-
+            
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-agent</id>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <phase>generate-test-resources</phase>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>net.sf.ehcache</groupId>
+                                    <artifactId>ehcache</artifactId>
+                                </artifactItem>
+                            </artifactItems>
+                            <includes>net/sf/ehcache/pool/sizeof/sizeof-agent.jar</includes>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>

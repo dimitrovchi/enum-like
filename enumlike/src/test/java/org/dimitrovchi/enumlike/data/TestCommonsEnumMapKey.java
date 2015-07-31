@@ -15,6 +15,7 @@
  */
 package org.dimitrovchi.enumlike.data;
 
+import net.sf.ehcache.pool.sizeof.annotations.IgnoreSizeOf;
 import org.apache.commons.lang.enums.Enum;
 import org.dimitrovchi.enumlike.base.DefaultValue;
 import org.dimitrovchi.enumlike.base.DefaultValueSupplier;
@@ -25,6 +26,7 @@ import org.dimitrovchi.enumlike.base.TypedKey;
  * 
  * @author Dmitry Ovchinnikov
  */
+@IgnoreSizeOf
 public class TestCommonsEnumMapKey<V> extends Enum implements TypedKey<V> {
     
     private final Class<V> type;

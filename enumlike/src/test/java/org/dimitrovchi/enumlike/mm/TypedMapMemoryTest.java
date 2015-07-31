@@ -18,13 +18,14 @@ package org.dimitrovchi.enumlike.mm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import net.sf.ehcache.pool.sizeof.SizeOf;
+import net.sf.ehcache.pool.sizeof.filter.AnnotationSizeOfFilter;
 import org.dimitrovchi.enumlike.base.TypedMap;
 import org.dimitrovchi.enumlike.collections.HashTypedMap;
 import org.dimitrovchi.enumlike.collections.IdentityHashTypedMap;
 import org.dimitrovchi.enumlike.collections.SkipListTypedMap;
 import org.dimitrovchi.enumlike.data.TestCommonsEnumMapKey;
 import org.dimitrovchi.enumlike.collections.TreeTypedMap;
-import org.github.jamm.MemoryMeter;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,12 +39,9 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class TypedMapMemoryTest {
 
-    private static final MemoryMeter MEMORY = new MemoryMeter()
-            .ignoreKnownSingletons()
-            .ignoreNonStrongReferences()
-            .withGuessing(MemoryMeter.Guess.FALLBACK_UNSAFE);
     private static final List<String> KEYS = new ArrayList<>(System.getProperties().stringPropertyNames());
     private static final List<TestCommonsEnumMapKey<Long>> TYPED_KEYS = new ArrayList<>();
+    private static final SizeOf SIZE_OF = new ObjectSizeOf(new AnnotationSizeOfFilter(), true);
 
     static {
         final int delta = 1024 - KEYS.size();
@@ -60,7 +58,7 @@ public class TypedMapMemoryTest {
     @Parameterized.Parameters
     public static Collection<Object[]> parameters() {
         final List<Object[]> parameters = new ArrayList<>();
-        for (final int size : new int[] {2, 3, 4, 9, 16, 35, 100, 270}) {
+        for (final int size : new int[] {5, 9, 16, 35, 100, 270}) {
             for (final int capacity : new int[] {16, 32, 64, 128}) {
                 parameters.add(new Object[] {new HashTypedMap(capacity), capacity, size});
                 parameters.add(new Object[] {new IdentityHashTypedMap(capacity), capacity, size});
@@ -79,7 +77,7 @@ public class TypedMapMemoryTest {
 
     @BeforeClass
     public static void init() {
-        System.out.println("Map_Name\tCap\tSize\tAmount");
+        System.out.println("Map\tCap\tSize\tAmount");
     }
 
     @Test
@@ -93,6 +91,6 @@ public class TypedMapMemoryTest {
                 new String(cps, 0, cps.length),
                 capacity,
                 size,
-                MEMORY.measureDeep(map));
+                SIZE_OF.deepSizeOf(Integer.MAX_VALUE, true, map).getCalculated());
     }
 }
