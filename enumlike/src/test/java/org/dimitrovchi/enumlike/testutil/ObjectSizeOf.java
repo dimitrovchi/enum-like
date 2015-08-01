@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dimitrovchi.enumlike.mm;
+package org.dimitrovchi.enumlike.testutil;
 
 import java.util.Objects;
 import net.sf.ehcache.pool.Size;

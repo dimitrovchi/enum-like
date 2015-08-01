@@ -13,31 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dimitrovchi.enumlike.base;
-
-import java.util.List;
-import javax.annotation.Nonnull;
+package org.dimitrovchi.enumlike;
 
 /**
- * Typed key container.
+ * Default enum map key container.
  * 
- * @param <E> Key type.
+ * @param <E> Enum type.
  * 
  * @author Dmitry Ovchinnikov
  */
-public interface TypedKeyContainer<E extends TypedKey> {
-    
-    /**
-     * Get elements.
-     * @return Typed key elements.
-     */
-    @Nonnull
-    List<E> getElements();
-    
-    /**
-     * Get element class.
-     * @return Element class.
-     */
-    @Nonnull
-    Class<E> getElementClass();
+public class DefaultEnumMapKeyContainer<E extends EnumMapKey> extends DefaultEnumContainer<E> implements EnumMapKeyContainer<E> {
+
+    public DefaultEnumMapKeyContainer(Class<E> enumClass, Class<?>... containerClasses) {
+        super(enumClass, containerClasses);
+    }
 }

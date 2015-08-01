@@ -24,6 +24,6 @@ import org.dimitrovchi.enumlike.base.TypedKeyContainer;
  * 
  * @author Dmitry Ovchinnikov
  */
-public interface EnumMapKeyContainer<E extends EnumMapKey<?>> extends EnumContainer<E>, TypedKeyContainer<E> {
+public interface EnumMapKeyContainer<E extends EnumMapKey> extends EnumContainer<E>, TypedKeyContainer<E> {
     
 }

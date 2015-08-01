@@ -13,31 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.dimitrovchi.enumlike.base;
+package org.dimitrovchi.enumlike;
 
-import java.util.List;
-import javax.annotation.Nonnull;
+import org.dimitrovchi.enumlike.data.TestEnumMapKey;
+import org.dimitrovchi.enumlike.data.TestEnums;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * Typed key container.
- * 
- * @param <E> Key type.
+ * DefaultEnumMapKeyContainer test.
  * 
  * @author Dmitry Ovchinnikov
  */
-public interface TypedKeyContainer<E extends TypedKey> {
+public class DefaultEnumMapKeyContainerTest {
     
-    /**
-     * Get elements.
-     * @return Typed key elements.
-     */
-    @Nonnull
-    List<E> getElements();
-    
-    /**
-     * Get element class.
-     * @return Element class.
-     */
-    @Nonnull
-    Class<E> getElementClass();
+    @Test
+    public void testContainer() {
+        final DefaultEnumMapKeyContainer<?> container = new DefaultEnumMapKeyContainer<>(TestEnumMapKey.class, TestEnums.class);
+        Assert.assertEquals(70, container.getElements().size());
+        Assert.assertEquals(69, container.getElements().size() - 1);
+    }
 }

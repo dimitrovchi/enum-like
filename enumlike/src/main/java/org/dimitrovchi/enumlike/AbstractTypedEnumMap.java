@@ -28,9 +28,9 @@ import org.dimitrovchi.enumlike.base.TypedMap;
  */
 public abstract class AbstractTypedEnumMap implements TypedMap {
     
-    protected final EnumMapKeyContainer<? extends EnumMapKey<?>> enumContainer;
+    protected final EnumMapKeyContainer<? extends EnumMapKey> enumContainer;
     
-    public AbstractTypedEnumMap(@Nonnull EnumMapKeyContainer<? extends EnumMapKey<?>> enumContainer) {
+    public AbstractTypedEnumMap(@Nonnull EnumMapKeyContainer<? extends EnumMapKey> enumContainer) {
         this.enumContainer = enumContainer;
     }
     

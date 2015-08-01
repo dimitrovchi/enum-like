@@ -24,7 +24,7 @@ import org.dimitrovchi.enumlike.base.TypedKey;
  */
 public abstract class AbstractArrayBasedTypedEnumMap extends AbstractTypedEnumMap {
 
-    public AbstractArrayBasedTypedEnumMap(EnumMapKeyContainer<? extends EnumMapKey<?>> enumContainer) {
+    public AbstractArrayBasedTypedEnumMap(EnumMapKeyContainer<? extends EnumMapKey> enumContainer) {
         super(enumContainer);
     }
 

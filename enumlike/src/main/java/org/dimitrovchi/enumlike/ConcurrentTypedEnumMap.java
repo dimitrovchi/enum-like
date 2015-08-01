@@ -26,7 +26,7 @@ public class ConcurrentTypedEnumMap extends AbstractArrayBasedTypedEnumMap {
     
     private final AtomicReferenceArray<Object> values;
 
-    public ConcurrentTypedEnumMap(EnumMapKeyContainer<? extends EnumMapKey<?>> enumContainer) {
+    public ConcurrentTypedEnumMap(EnumMapKeyContainer<? extends EnumMapKey> enumContainer) {
         super(enumContainer);
         this.values = new AtomicReferenceArray<>(enumContainer.getMaxOrdinal() + 1);
     }

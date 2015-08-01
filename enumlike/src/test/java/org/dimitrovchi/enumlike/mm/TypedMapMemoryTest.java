@@ -15,17 +15,23 @@
  */
 package org.dimitrovchi.enumlike.mm;
 
+import org.dimitrovchi.enumlike.testutil.ObjectSizeOf;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import net.sf.ehcache.pool.sizeof.SizeOf;
 import net.sf.ehcache.pool.sizeof.filter.AnnotationSizeOfFilter;
+import org.apache.karaf.shell.table.HAlign;
+import org.apache.karaf.shell.table.ShellTable;
+import org.dimitrovchi.enumlike.ConcurrentTypedEnumMap;
+import org.dimitrovchi.enumlike.TypedEnumMap;
 import org.dimitrovchi.enumlike.base.TypedMap;
 import org.dimitrovchi.enumlike.collections.HashTypedMap;
 import org.dimitrovchi.enumlike.collections.IdentityHashTypedMap;
 import org.dimitrovchi.enumlike.collections.SkipListTypedMap;
-import org.dimitrovchi.enumlike.data.TestCommonsEnumMapKey;
 import org.dimitrovchi.enumlike.collections.TreeTypedMap;
+import org.dimitrovchi.enumlike.data.TestEnumMapKeyContainer;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,35 +45,32 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class TypedMapMemoryTest {
 
-    private static final List<String> KEYS = new ArrayList<>(System.getProperties().stringPropertyNames());
-    private static final List<TestCommonsEnumMapKey<Long>> TYPED_KEYS = new ArrayList<>();
     private static final SizeOf SIZE_OF = new ObjectSizeOf(new AnnotationSizeOfFilter(), true);
-
-    static {
-        final int delta = 1024 - KEYS.size();
-        for (int i = 0; i < delta; i++) {
-            KEYS.add(KEYS.get(i % KEYS.size()) + "_" + "key_" + Math.pow(i, 3));
-        }
-        KEYS.forEach(key -> TYPED_KEYS.add(new TestCommonsEnumMapKey<>(key, Long.class, 100L)));
-    }
-
-    private final TypedMap map;
-    private final int capacity;
-    private final int size;
+    private static final ShellTable RESULTS = new ShellTable();
+    private static final TestEnumMapKeyContainer CONTAINER = new TestEnumMapKeyContainer(70);
 
     @Parameterized.Parameters
     public static Collection<Object[]> parameters() {
         final List<Object[]> parameters = new ArrayList<>();
-        for (final int size : new int[] {5, 9, 16, 35, 100, 270}) {
-            for (final int capacity : new int[] {16, 32, 64, 128}) {
+        for (final int size : new int[] {7, 9, 16, 35, 50, 70}) {
+            for (final int capacity : new int[] {16, 32, 64, 70}) {
                 parameters.add(new Object[] {new HashTypedMap(capacity), capacity, size});
                 parameters.add(new Object[] {new IdentityHashTypedMap(capacity), capacity, size});
+                if (size <= capacity) {
+                    final TestEnumMapKeyContainer container = new TestEnumMapKeyContainer(capacity);
+                    parameters.add(new Object[] {new TypedEnumMap(container), capacity, size});
+                    parameters.add(new Object[] {new ConcurrentTypedEnumMap(container), capacity, size});
+                }
             }
             parameters.add(new Object[] {new TreeTypedMap(), 0, size});
             parameters.add(new Object[] {new SkipListTypedMap(), 0, size});
         }
         return parameters;
     }
+    
+    private final TypedMap map;
+    private final int capacity;
+    private final int size;
 
     public TypedMapMemoryTest(TypedMap map, int capacity, int size) {
         this.map = map;
@@ -77,20 +80,31 @@ public class TypedMapMemoryTest {
 
     @BeforeClass
     public static void init() {
-        System.out.println("Map\tCap\tSize\tAmount");
+        RESULTS.column("Map").align(HAlign.left);
+        RESULTS.column("Capacity").align(HAlign.right);
+        RESULTS.column("Size").align(HAlign.right);
+        RESULTS.column("Amount").align(HAlign.right);
+    }
+
+    @AfterClass
+    public static void results() {
+        synchronized (System.out) {
+            System.out.println();
+            RESULTS.print(System.out);
+            System.out.println();
+        }
     }
 
     @Test
     public void testMapMemoryConsumption() {
         for (int i = 0; i < size; i++) {
-            map.put(TYPED_KEYS.get(i), 300L);
+            map.put(CONTAINER.getElements().get(i), 300);
         }
-        final int[] cps = map.getClass().getSimpleName().codePoints()
-                .filter(Character::isUpperCase).toArray();
-        System.out.printf("%s\t%d\t%d\t%d%n",
-                new String(cps, 0, cps.length),
+        RESULTS.addRow().addContent(
+                map.getClass().getSimpleName(),
                 capacity,
                 size,
-                SIZE_OF.deepSizeOf(Integer.MAX_VALUE, true, map).getCalculated());
+                SIZE_OF.deepSizeOf(Integer.MAX_VALUE, true, map).getCalculated()
+        );
     }
 }

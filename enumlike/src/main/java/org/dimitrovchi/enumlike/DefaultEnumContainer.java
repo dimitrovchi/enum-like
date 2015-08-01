@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nonnull;
 
@@ -52,6 +53,12 @@ public class DefaultEnumContainer<E extends Enum> implements EnumContainer<E> {
         if (enumList.isEmpty()) {
             throw new IllegalArgumentException("Container classes " + Arrays.asList(containerClasses) + " don't contain enums");
         }
+        Collections.sort(enumList, new Comparator<E>() {
+            @Override
+            public int compare(E o1, E o2) {
+                return Integer.compare(o1.ordinal(), o2.ordinal());
+            }
+        });
         enums = Collections.unmodifiableList(enumList);
         int max = 0;
         for (final E e : enumList) {

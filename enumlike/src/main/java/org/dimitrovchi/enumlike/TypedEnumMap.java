@@ -26,7 +26,7 @@ public class TypedEnumMap extends AbstractArrayBasedTypedEnumMap {
 
     private final Object[] values;
 
-    public TypedEnumMap(EnumMapKeyContainer<? extends EnumMapKey<?>> enumContainer) {
+    public TypedEnumMap(EnumMapKeyContainer<? extends EnumMapKey> enumContainer) {
         super(enumContainer);
         this.values = new Object[enumContainer.getMaxOrdinal() + 1];
     }

@@ -15,12 +15,12 @@
  */
 package org.dimitrovchi.enumlike;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import org.dimitrovchi.enumlike.base.DefaultValue;
-import org.dimitrovchi.enumlike.base.DefaultValueSupplier;
+import java.lang.reflect.Field;
+import java.util.Comparator;
+import java.util.TreeSet;
+import java.util.stream.IntStream;
+import org.dimitrovchi.enumlike.data.TestEnumMapKey;
+import org.dimitrovchi.enumlike.data.TestEnums;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,35 +32,13 @@ import org.junit.Test;
 public class EnumMapKeyTest {
 
     @Test
-    public void testOrdinals() {
-        final TestKey[] enums = {TestEnumKeys2.KEY1, TestEnumKeys2.KEY2, TestEnumKeys2.KEY3};
-        final List<String> keyNames = new ArrayList<>();
-        for (final TestKey<?> key : enums) {
-            keyNames.add(key.name());
+    public void testOrdinals() throws Exception {
+        final TreeSet<TestEnumMapKey<?>> set = new TreeSet<>(Comparator.comparing(k -> k.ordinal()));
+        for (final Field field : TestEnums.class.getFields()) {
+            set.add((TestEnumMapKey<?>) field.get(null));
         }
-        Collections.sort(keyNames);
-        Assert.assertEquals(Arrays.asList("KEY1", "KEY2", "KEY3"), keyNames);
-    }
-
-    interface TestEnumKeys {
-
-        TestKey<Integer> KEY1 = new TestKey<>(Integer.class, new DefaultValue<>(0));
-        TestKey<String> KEY2 = new TestKey<>(String.class);
-    }
-
-    interface TestEnumKeys2 extends TestEnumKeys {
-
-        TestKey<String> KEY3 = new TestKey<>(String.class);
-    }
-
-    private static class TestKey<V> extends EnumMapKey<V> {
-
-        public TestKey(Class<V> valueType, DefaultValueSupplier<V> defaultValueSupplier) {
-            super(valueType, defaultValueSupplier);
-        }
-
-        public TestKey(Class<V> valueType) {
-            super(valueType);
-        }
+        final int[] ordinals = set.stream().mapToInt(TestEnumMapKey::ordinal).toArray();
+        final int[] expectedOrdinals = IntStream.range(0, set.size()).toArray();
+        Assert.assertArrayEquals(expectedOrdinals, ordinals);
     }
 }
