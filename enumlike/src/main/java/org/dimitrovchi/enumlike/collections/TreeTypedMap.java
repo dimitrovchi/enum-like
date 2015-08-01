@@ -15,6 +15,7 @@
  */
 package org.dimitrovchi.enumlike.collections;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import org.dimitrovchi.enumlike.base.TypedKey;
@@ -27,7 +28,15 @@ import org.dimitrovchi.enumlike.base.TypedMap;
  */
 public class TreeTypedMap implements TypedMap {
     
-    private final Map<TypedKey<?>, Object> map = new TreeMap<>();
+    private final Map<TypedKey<?>, Object> map;
+    
+    public TreeTypedMap() {
+        map = new TreeMap<>();
+    }
+    
+    public TreeTypedMap(Comparator<? super TypedKey<?>> comparator) {
+        map = new TreeMap<>(comparator);
+    }
 
     @Override
     public boolean containsKey(TypedKey<?> key) {

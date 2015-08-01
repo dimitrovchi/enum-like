@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
  * 
  * @author Dmitry Ovchinnikov
  */
-public abstract class EnumMapKey<V> extends Enum implements TypedKey<V>, Comparable<EnumMapKey> {
+public abstract class EnumMapKey<V> extends Enum implements TypedKey<V> {
     
     private final Class<V> type;
     private final DefaultValueSupplier<V> defaultValueSupplier;
@@ -71,10 +71,5 @@ public abstract class EnumMapKey<V> extends Enum implements TypedKey<V>, Compara
     @Nonnull
     public DefaultValueSupplier<V> getDefaultValueSupplier() {
         return defaultValueSupplier;
-    }
-
-    @Override
-    public int compareTo(EnumMapKey o) {
-        return Integer.compare(ordinal(), o.ordinal());
     }
 }

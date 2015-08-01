@@ -27,7 +27,7 @@ import org.dimitrovchi.enumlike.base.DefaultValueSupplier;
  * @author Dmitry Ovchinnikov
  */
 @IgnoreSizeOf
-public class TestEnumMapKey<T> extends EnumMapKey<T> {
+public class TestEnumMapKey<T> extends EnumMapKey<T> implements Comparable<TestEnumMapKey<T>> {
 
     public TestEnumMapKey(Class<T> type, DefaultValueSupplier<T> defaultValueSupplier) {
         super(type, defaultValueSupplier);
@@ -35,5 +35,10 @@ public class TestEnumMapKey<T> extends EnumMapKey<T> {
 
     public TestEnumMapKey(Class<T> valueType) {
         super(valueType);
+    }
+
+    @Override
+    public int compareTo(TestEnumMapKey<T> o) {
+        return Integer.compare(ordinal(), o.ordinal());
     }
 }

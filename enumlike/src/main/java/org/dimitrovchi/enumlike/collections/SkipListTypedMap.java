@@ -15,6 +15,7 @@
  */
 package org.dimitrovchi.enumlike.collections;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 import org.dimitrovchi.enumlike.base.TypedKey;
@@ -27,7 +28,15 @@ import org.dimitrovchi.enumlike.base.TypedMap;
  */
 public class SkipListTypedMap implements TypedMap {
     
-    private final Map<TypedKey<?>, Object> map = new ConcurrentSkipListMap<>();
+    private final Map<TypedKey<?>, Object> map;
+    
+    public SkipListTypedMap() {
+        map = new ConcurrentSkipListMap<>();
+    }
+    
+    public SkipListTypedMap(Comparator<? super TypedKey<?>> comparator) {
+        map = new ConcurrentSkipListMap<>(comparator);
+    }
 
     @Override
     public boolean containsKey(TypedKey<?> key) {
