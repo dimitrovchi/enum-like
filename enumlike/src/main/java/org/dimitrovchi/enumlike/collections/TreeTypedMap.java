@@ -26,7 +26,7 @@ import org.dimitrovchi.enumlike.base.TypedMap;
  * 
  * @author Dmitry Ovchinnikov
  */
-public class TreeTypedMap implements TypedMap {
+public final class TreeTypedMap implements TypedMap {
     
     private final Map<TypedKey<?>, Object> map;
     

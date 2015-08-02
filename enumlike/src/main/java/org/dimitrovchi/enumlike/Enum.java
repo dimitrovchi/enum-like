@@ -105,7 +105,7 @@ public abstract class Enum {
      *
      * @return Enum-like instance ordinal value.
      */
-    public int ordinal() {
+    public final int ordinal() {
         return ordinal;
     }
 

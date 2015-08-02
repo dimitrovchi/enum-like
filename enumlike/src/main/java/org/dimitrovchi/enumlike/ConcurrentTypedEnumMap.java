@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * 
  * @author Dmitry Ovchinnikov
  */
-public class ConcurrentTypedEnumMap extends AbstractArrayBasedTypedEnumMap {
+public final class ConcurrentTypedEnumMap extends AbstractArrayBasedTypedEnumMap {
     
     private final AtomicReferenceArray<Object> values;
 

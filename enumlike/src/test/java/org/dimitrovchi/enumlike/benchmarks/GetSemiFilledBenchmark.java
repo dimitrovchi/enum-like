@@ -52,12 +52,12 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Warmup(iterations = 3, batchSize = GetFilledBenchmark.BATCH)
-@Measurement(iterations = 5, batchSize = GetFilledBenchmark.BATCH)
+@Warmup(iterations = 3, batchSize = GetSemiFilledBenchmark.BATCH)
+@Measurement(iterations = 5, batchSize = GetSemiFilledBenchmark.BATCH)
 @Fork(3)
-@OperationsPerInvocation(70 * GetFilledBenchmark.BATCH)
+@OperationsPerInvocation(70 * GetSemiFilledBenchmark.BATCH)
 @SuppressWarnings("unchecked")
-public class GetFilledBenchmark {
+public class GetSemiFilledBenchmark {
 
     public static final int BATCH = 10_000;
     private static final int CAPACITY = 70;
@@ -85,16 +85,20 @@ public class GetFilledBenchmark {
             final String k = Integer.toString(random.nextInt(1_000_000), Character.MAX_RADIX) + i;
             final TestCommonsEnumMapKey<Integer> key = new TestCommonsEnumMapKey(k, Integer.class, 0);
             STR_KEYS[i] = key;
-            STR_HASH_MAP.put(key, random.nextInt());
-            I_STR_HASH_MAP.put(key, random.nextInt());
+            if (i % 2 == 0) {
+                STR_HASH_MAP.put(key, random.nextInt());
+                I_STR_HASH_MAP.put(key, random.nextInt());
+            }
         }
         for (final TestEnumMapKey k : CONTAINER.getElements()) {
-            ENUM_MAP.put(k, random.nextInt());
-            C_ENUM_MAP.put(k, random.nextInt());
-            HASH_TYPED_MAP.put(k, random.nextInt());
-            I_HASH_TYPED_MAP.put(k, random.nextInt());
-            TREE_TYPED_MAP.put(k, random.nextInt());
-            SKIPLIST_TYPED_MAP.put(k, random.nextInt());
+            if (k.ordinal() % 2 == 0) {
+                ENUM_MAP.put(k, random.nextInt());
+                C_ENUM_MAP.put(k, random.nextInt());
+                HASH_TYPED_MAP.put(k, random.nextInt());
+                I_HASH_TYPED_MAP.put(k, random.nextInt());
+                TREE_TYPED_MAP.put(k, random.nextInt());
+                SKIPLIST_TYPED_MAP.put(k, random.nextInt());
+            }
         }
     }
         
@@ -157,7 +161,7 @@ public class GetFilledBenchmark {
     public static void main(String... args) throws Exception {
         new Runner(new OptionsBuilder()
                 .jvmArgsAppend("-XX:+UseG1GC", "-D" + AbstractTypedEnumMap.FAST_KEY)
-                .include(GetFilledBenchmark.class.getSimpleName())
+                .include(GetSemiFilledBenchmark.class.getSimpleName())
                 .build()).run();
     }
 }

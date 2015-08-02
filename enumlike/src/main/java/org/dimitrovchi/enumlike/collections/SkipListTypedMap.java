@@ -26,7 +26,7 @@ import org.dimitrovchi.enumlike.base.TypedMap;
  * 
  * @author Dmitry Ovchinnikov
  */
-public class SkipListTypedMap implements TypedMap {
+public final class SkipListTypedMap implements TypedMap {
     
     private final Map<TypedKey<?>, Object> map;
     

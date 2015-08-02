@@ -25,7 +25,7 @@ import org.dimitrovchi.enumlike.base.TypedMap;
  * 
  * @author Dmitry Ovchinnikov
  */
-public class IdentityHashTypedMap implements TypedMap {
+public final class IdentityHashTypedMap implements TypedMap {
     
     private final Map<TypedKey<?>, Object> map;
 

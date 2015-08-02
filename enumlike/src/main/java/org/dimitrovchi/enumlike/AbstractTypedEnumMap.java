@@ -28,6 +28,9 @@ import org.dimitrovchi.enumlike.base.TypedMap;
  */
 public abstract class AbstractTypedEnumMap implements TypedMap {
     
+    public static final String FAST_KEY = AbstractTypedEnumMap.class.getName() + ".FAST";
+    private static final boolean FAST = System.getProperties().containsKey(FAST_KEY);
+    
     protected final EnumMapKeyContainer<? extends EnumMapKey> enumContainer;
     
     public AbstractTypedEnumMap(@Nonnull EnumMapKeyContainer<? extends EnumMapKey> enumContainer) {
@@ -36,9 +39,17 @@ public abstract class AbstractTypedEnumMap implements TypedMap {
     
     protected abstract int fullSize();
         
-    protected EnumMapKey<?> key(TypedKey<?> key) {
+    protected final EnumMapKey<?> key(TypedKey<?> key) {
         try {
-            return enumContainer.getElementClass().cast(key);
+            if (FAST) {
+                return enumContainer.getElementClass().cast(key);
+            } else {
+                final EnumMapKey<?> k = (EnumMapKey<?>) key;
+                if (k.getEnumClass() != enumContainer.getElementClass()) {
+                    throw new ClassCastException(k.getEnumClass().getName());
+                }
+                return k;
+            }
         } catch (ClassCastException x) {
             throw new IllegalArgumentException("Unknown key: " + key, x);
         }

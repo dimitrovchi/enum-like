@@ -22,7 +22,7 @@ import java.util.Arrays;
  *
  * @author Dmitry Ovchinnikov
  */
-public class TypedEnumMap extends AbstractArrayBasedTypedEnumMap {
+public final class TypedEnumMap extends AbstractArrayBasedTypedEnumMap {
 
     private final Object[] values;
 
@@ -32,7 +32,7 @@ public class TypedEnumMap extends AbstractArrayBasedTypedEnumMap {
     }
 
     @Override
-    public boolean containsValue(Object value) {
+    public final boolean containsValue(Object value) {
         for (final Object v : values) {
             if (v != null && v.equals(value)) {
                 return true;
