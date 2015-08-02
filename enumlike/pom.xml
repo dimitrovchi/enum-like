@@ -96,6 +96,9 @@ limitations under the License.
                 <configuration>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
+                    <compilerArgs>
+                        <arg>-Xlint:unchecked</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             

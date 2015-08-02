@@ -38,11 +38,7 @@ public abstract class AbstractTypedEnumMap implements TypedMap {
         
     protected EnumMapKey<?> key(TypedKey<?> key) {
         try {
-            final EnumMapKey<?> k = (EnumMapKey<?>) key;
-            if (k.getEnumClass() != enumContainer.getElementClass()) {
-                throw new ClassCastException("Invalid enum class: " + k.getEnumClass().getName());
-            }
-            return k;
+            return enumContainer.getElementClass().cast(key);
         } catch (ClassCastException x) {
             throw new IllegalArgumentException("Unknown key: " + key, x);
         }

@@ -38,7 +38,7 @@ public class TestEnumMapKey<T> extends EnumMapKey<T> implements Comparable<TestE
     }
 
     @Override
-    public int compareTo(TestEnumMapKey<T> o) {
+    public final int compareTo(TestEnumMapKey<T> o) {
         return Integer.compare(ordinal(), o.ordinal());
     }
 }

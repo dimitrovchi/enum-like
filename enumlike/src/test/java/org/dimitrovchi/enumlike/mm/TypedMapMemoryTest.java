@@ -24,13 +24,16 @@ import net.sf.ehcache.pool.sizeof.filter.AnnotationSizeOfFilter;
 import org.apache.karaf.shell.table.HAlign;
 import org.apache.karaf.shell.table.ShellTable;
 import org.dimitrovchi.enumlike.ConcurrentTypedEnumMap;
+import org.dimitrovchi.enumlike.DefaultEnumMapKeyContainer;
 import org.dimitrovchi.enumlike.TypedEnumMap;
 import org.dimitrovchi.enumlike.base.TypedMap;
 import org.dimitrovchi.enumlike.collections.HashTypedMap;
 import org.dimitrovchi.enumlike.collections.IdentityHashTypedMap;
 import org.dimitrovchi.enumlike.collections.SkipListTypedMap;
 import org.dimitrovchi.enumlike.collections.TreeTypedMap;
+import org.dimitrovchi.enumlike.data.TestEnumMapKey;
 import org.dimitrovchi.enumlike.data.TestEnumMapKeyContainer;
+import org.dimitrovchi.enumlike.data.TestEnums;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -47,16 +50,16 @@ public class TypedMapMemoryTest {
 
     private static final SizeOf SIZE_OF = new ObjectSizeOf(new AnnotationSizeOfFilter(), true);
     private static final ShellTable RESULTS = new ShellTable();
-    private static final TestEnumMapKeyContainer CONTAINER = new TestEnumMapKeyContainer(70);
+    private static final DefaultEnumMapKeyContainer<TestEnumMapKey> CONTAINER = new DefaultEnumMapKeyContainer<>(TestEnumMapKey.class, TestEnums.class);
 
     @Parameterized.Parameters
     public static Collection<Object[]> parameters() {
         final List<Object[]> parameters = new ArrayList<>();
         for (final int size : new int[] {7, 9, 16, 35, 50, 70}) {
             for (final int capacity : new int[] {16, 32, 64, 70}) {
-                parameters.add(new Object[] {new HashTypedMap(capacity), capacity, size});
-                parameters.add(new Object[] {new IdentityHashTypedMap(capacity), capacity, size});
                 if (size <= capacity) {
+                    parameters.add(new Object[] {new HashTypedMap(capacity), capacity, size});
+                    parameters.add(new Object[] {new IdentityHashTypedMap(capacity), capacity, size});
                     final TestEnumMapKeyContainer container = new TestEnumMapKeyContainer(capacity);
                     parameters.add(new Object[] {new TypedEnumMap(container), capacity, size});
                     parameters.add(new Object[] {new ConcurrentTypedEnumMap(container), capacity, size});
@@ -96,6 +99,7 @@ public class TypedMapMemoryTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMapMemoryConsumption() {
         for (int i = 0; i < size; i++) {
             map.put(CONTAINER.getElements().get(i), 300);

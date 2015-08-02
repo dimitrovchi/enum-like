@@ -39,17 +39,17 @@ public class TestCommonsEnumMapKey<V> extends Enum implements TypedKey<V> {
     }
 
     @Override
-    public Class<V> getType() {
+    public final Class<V> getType() {
         return type;
     }
 
     @Override
-    public String name() {
+    public final String name() {
         return getName();
     }
 
     @Override
-    public DefaultValueSupplier<V> getDefaultValueSupplier() {
+    public final DefaultValueSupplier<V> getDefaultValueSupplier() {
         return defaultValueSupplier;
     }
 }

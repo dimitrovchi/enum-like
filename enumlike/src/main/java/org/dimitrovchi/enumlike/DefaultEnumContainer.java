@@ -75,7 +75,7 @@ public class DefaultEnumContainer<E extends Enum> implements EnumContainer<E> {
     }
 
     @Override
-    public Class<E> getElementClass() {
+    public final Class<E> getElementClass() {
         return enumClass;
     }
 

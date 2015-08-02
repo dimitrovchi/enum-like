@@ -46,5 +46,5 @@ public interface EnumContainer<E extends Enum> {
      * Get maximum ordinal.
      * @return Maximum ordinal.
      */
-    int getMaxOrdinal();
+    int getMaxOrdinal();    
 }

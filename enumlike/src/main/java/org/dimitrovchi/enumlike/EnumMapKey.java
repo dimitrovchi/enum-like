@@ -58,7 +58,7 @@ public abstract class EnumMapKey<V> extends Enum implements TypedKey<V> {
      */
     @Override
     @Nonnull
-    public Class<V> getType() {
+    public final Class<V> getType() {
         return type;
     }
     
@@ -69,7 +69,7 @@ public abstract class EnumMapKey<V> extends Enum implements TypedKey<V> {
      */
     @Override
     @Nonnull
-    public DefaultValueSupplier<V> getDefaultValueSupplier() {
+    public final DefaultValueSupplier<V> getDefaultValueSupplier() {
         return defaultValueSupplier;
     }
 }

@@ -27,6 +27,7 @@ public class Benchmarks {
     
     public static void main(String... args) throws Exception {
         new Runner(new OptionsBuilder()
+                .jvmArgsAppend("-XX:+UseG1GC")
                 .include(".+Benchmark")
                 .build()).run();
     }
