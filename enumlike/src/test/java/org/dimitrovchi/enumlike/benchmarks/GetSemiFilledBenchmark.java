@@ -80,7 +80,7 @@ public class GetSemiFilledBenchmark {
     private static final TypedMap I_STR_HASH_MAP = new IdentityHashTypedMap(CAPACITY);
     
     static {
-        final Random random = new Random(0L);
+        final Random random = new Random(1000L);
         for (int i = 0; i < CAPACITY; i++) {
             final String k = Integer.toString(random.nextInt(1_000_000), Character.MAX_RADIX) + i;
             final TestCommonsEnumMapKey<Integer> key = new TestCommonsEnumMapKey(k, Integer.class, 0);

@@ -23,6 +23,7 @@ import net.sf.ehcache.pool.sizeof.SizeOf;
 import net.sf.ehcache.pool.sizeof.filter.AnnotationSizeOfFilter;
 import org.apache.karaf.shell.table.HAlign;
 import org.apache.karaf.shell.table.ShellTable;
+import org.dimitrovchi.enumlike.ArrayTypedEnumMap;
 import org.dimitrovchi.enumlike.ConcurrentTypedEnumMap;
 import org.dimitrovchi.enumlike.DefaultEnumMapKeyContainer;
 import org.dimitrovchi.enumlike.TypedEnumMap;
@@ -67,6 +68,7 @@ public class TypedMapMemoryTest {
             }
             parameters.add(new Object[] {new TreeTypedMap(), 0, size});
             parameters.add(new Object[] {new SkipListTypedMap(), 0, size});
+            parameters.add(new Object[] {new ArrayTypedEnumMap(), 0, size});
         }
         return parameters;
     }

@@ -16,6 +16,8 @@
 package org.dimitrovchi.enumlike.base;
 
 import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Typed map.
@@ -24,15 +26,15 @@ import java.util.Map;
  */
 public interface TypedMap {
     
-    boolean containsKey(TypedKey<?> key);
+    boolean containsKey(@Nonnull TypedKey<?> key);
     
-    boolean containsValue(Object value);
+    boolean containsValue(@Nullable Object value);
     
-    <K extends TypedKey<V>, V> V get(K key);
+    <K extends TypedKey<V>, V> V get(@Nonnull K key);
     
-    <K extends TypedKey<V>, V> V put(K key, V value);
+    <K extends TypedKey<V>, V> V put(@Nonnull K key, V value);
         
-    <K extends TypedKey<V>, V> V remove(K key);
+    <K extends TypedKey<V>, V> V remove(@Nonnull K key);
     
     void clear();
     
