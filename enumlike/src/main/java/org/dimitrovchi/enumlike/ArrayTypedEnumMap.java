@@ -16,7 +16,6 @@
 package org.dimitrovchi.enumlike;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.dimitrovchi.enumlike.base.TypedKey;
@@ -28,21 +27,13 @@ import org.dimitrovchi.enumlike.base.TypedMap;
  * @author Dmitry Ovchinnikov
  */
 public class ArrayTypedEnumMap implements TypedMap {
-    
-    private static final Comparator<Object> COMPARATOR = new Comparator<Object>() {
-        @Override
-        public int compare(Object o1, Object o2) {
-            final Object k1 = o1 instanceof Object[] ? ((Object[]) o1)[0] : o1;
-            final Object k2 = o2 instanceof Object[] ? ((Object[]) o2)[0] : o2;
-            return Integer.compare(k1.hashCode(), k2.hashCode());
-        }
-    };
-    
-    private Object[][] table = new Object[0][2];
+        
+    private TypedKey<?>[] keys = new TypedKey<?>[0];
+    private Object[] values = new Object[0];
 
     @Override
     public boolean containsKey(TypedKey<?> key) {
-        return Arrays.binarySearch(table, key, COMPARATOR) >= 0;
+        return binarySearch(keys, key) >= 0;
     }
 
     @Override
@@ -50,8 +41,8 @@ public class ArrayTypedEnumMap implements TypedMap {
         if (value == null) {
             return false;
         }
-        for (final Object[] pair : table) {
-            if (value.equals(pair[1])) {
+        for (final Object v : values) {
+            if (value.equals(v)) {
                 return true;
             }
         }
@@ -61,7 +52,7 @@ public class ArrayTypedEnumMap implements TypedMap {
     @Override
     public <K extends TypedKey<V>, V> V get(K key) {
         try {
-            return key.getType().cast(table[Arrays.binarySearch(table, key, COMPARATOR)][1]);
+            return key.getType().cast(values[binarySearch(keys, key)]);
         } catch (IndexOutOfBoundsException x) {
             return null;
         }
@@ -72,31 +63,29 @@ public class ArrayTypedEnumMap implements TypedMap {
         if (value == null) {
             return remove(key);
         } else {
-            final int index = Arrays.binarySearch(table, key, COMPARATOR);
+            final int index = binarySearch(keys, key);
             if (index >= 0) {
-                final Object old = table[index][1];
-                table[index][1] = value;
+                final Object old = values[index];
+                values[index] = value;
                 return key.getType().cast(old);
             } else {
                 final int ip = -(index + 1);
-                final int n = table.length;
+                final int n = size();
                 if (n == 0) {
-                    table = new Object[1][2];
-                    table[0][0] = key;
-                    table[0][1] = value;
+                    keys = new TypedKey<?>[] {key};
+                    values = new Object[] {value};
                 } else if (ip == n) {
-                    final Object[][] t = new Object[n + 1][2];
-                    System.arraycopy(table, 0, t, 0, n);
-                    t[n][0] = key;
-                    t[n][1] = value;
-                    table = t;
+                    keys = Arrays.copyOf(keys, n + 1);
+                    values = Arrays.copyOf(values, n + 1);
+                    keys[n] = key;
+                    values[n] = value;
                 } else {
-                    final Object[][] t = new Object[n + 1][2];
-                    System.arraycopy(table, 0, t, 0, ip);
-                    t[ip][0] = key;
-                    t[ip][1] = value;
-                    System.arraycopy(table, ip, t, ip + 1, n - ip);
-                    table = t;
+                    keys = Arrays.copyOf(keys, n + 1);
+                    values = Arrays.copyOf(values, n + 1);
+                    System.arraycopy(keys, ip, keys, ip + 1, n - ip);
+                    System.arraycopy(values, ip, values, ip + 1, n - ip);
+                    keys[ip] = key;
+                    values[ip] = value;
                 }
                 return null;
             }
@@ -105,15 +94,18 @@ public class ArrayTypedEnumMap implements TypedMap {
 
     @Override
     public <K extends TypedKey<V>, V> V remove(K key) {
-        final int index = Arrays.binarySearch(table, key, COMPARATOR);
+        final int index = binarySearch(keys, key);
         if (index >= 0) {
-            final Object old = table[index][1];
-            final int n = table.length - 1;
+            final Object old = values[index];
+            final int n = size() - 1;
             if (index == n) {
-                table = Arrays.copyOf(table, n);
+                keys = Arrays.copyOf(keys, n);
+                values = Arrays.copyOf(values, n);
             } else {
-                System.arraycopy(table, index + 1, table, index, n - index);
-                table = Arrays.copyOf(table, n);
+                System.arraycopy(keys, index + 1, keys, index, n - index);
+                System.arraycopy(values, index + 1, values, index, n - index);
+                keys = Arrays.copyOf(keys, n);
+                values = Arrays.copyOf(values, n);
             }
             return key.getType().cast(old);
         } else {
@@ -123,20 +115,38 @@ public class ArrayTypedEnumMap implements TypedMap {
 
     @Override
     public void clear() {
-        table = new Object[0][2];
+        keys = new TypedKey<?>[0];
+        values = new Object[0];
     }
 
     @Override
     public int size() {
-        return table.length;
+        return keys.length;
     }
 
     @Override
     public Map<? extends TypedKey<?>, ?> toMap() {
-        final Map<TypedKey<?>, Object> map = new LinkedHashMap<>(table.length);
-        for (final Object[] pair : table) {
-            map.put((TypedKey<?>) pair[0], pair[1]);
+        final Map<TypedKey<?>, Object> map = new LinkedHashMap<>(keys.length);
+        for (int i = 0; i < keys.length; i++) {
+            map.put((TypedKey<?>) keys[i], values[i]);
         }
         return map;
+    }
+    
+    private static int binarySearch(Object[] a, Object key) {
+        int low = 0;
+        int high = a.length - 1;
+        while (low <= high) {
+            final int mid = (low + high) >>> 1;
+            final int cmp = a[mid].hashCode() - key.hashCode();
+            if (cmp < 0) {
+                low = mid + 1;
+            } else if (cmp > 0) {
+                high = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        return -(low + 1);
     }
 }

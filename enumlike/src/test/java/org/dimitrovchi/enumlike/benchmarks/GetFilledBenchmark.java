@@ -74,7 +74,7 @@ public class GetFilledBenchmark {
     private static final TypedMap I_HASH_TYPED_MAP = new IdentityHashTypedMap(CAPACITY);
     private static final TypedMap TREE_TYPED_MAP = new TreeTypedMap();
     private static final TypedMap SKIPLIST_TYPED_MAP = new SkipListTypedMap();
-    private static final TypedMap I_MAP = new ArrayTypedEnumMap();
+    private static final TypedMap A_MAP = new ArrayTypedEnumMap();
     
     private static final TestCommonsEnumMapKey[] STR_KEYS = new TestCommonsEnumMapKey[CAPACITY];
     
@@ -97,7 +97,7 @@ public class GetFilledBenchmark {
             I_HASH_TYPED_MAP.put(k, random.nextInt());
             TREE_TYPED_MAP.put(k, random.nextInt());
             SKIPLIST_TYPED_MAP.put(k, random.nextInt());
-            I_MAP.put(k, random.nextInt());
+            A_MAP.put(k, random.nextInt());
         }
     }
         
@@ -132,8 +132,8 @@ public class GetFilledBenchmark {
     }
     
     @Benchmark
-    public void getFromIMap() throws Exception {
-        get(I_MAP);
+    public void getFromAMap() throws Exception {
+        get(A_MAP);
     }
     
     @Benchmark

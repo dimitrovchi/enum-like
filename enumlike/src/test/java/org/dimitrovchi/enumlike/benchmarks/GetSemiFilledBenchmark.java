@@ -18,6 +18,7 @@ package org.dimitrovchi.enumlike.benchmarks;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import org.dimitrovchi.enumlike.AbstractTypedEnumMap;
+import org.dimitrovchi.enumlike.ArrayTypedEnumMap;
 import org.dimitrovchi.enumlike.ConcurrentTypedEnumMap;
 import org.dimitrovchi.enumlike.DefaultEnumMapKeyContainer;
 import org.dimitrovchi.enumlike.EnumMapKeyContainer;
@@ -73,6 +74,7 @@ public class GetSemiFilledBenchmark {
     private static final TypedMap I_HASH_TYPED_MAP = new IdentityHashTypedMap(CAPACITY);
     private static final TypedMap TREE_TYPED_MAP = new TreeTypedMap();
     private static final TypedMap SKIPLIST_TYPED_MAP = new SkipListTypedMap();
+    private static final TypedMap A_MAP = new ArrayTypedEnumMap();
     
     private static final TestCommonsEnumMapKey[] STR_KEYS = new TestCommonsEnumMapKey[CAPACITY];
     
@@ -98,6 +100,7 @@ public class GetSemiFilledBenchmark {
                 I_HASH_TYPED_MAP.put(k, random.nextInt());
                 TREE_TYPED_MAP.put(k, random.nextInt());
                 SKIPLIST_TYPED_MAP.put(k, random.nextInt());
+                A_MAP.put(k, random.nextInt());
             }
         }
     }
@@ -130,6 +133,11 @@ public class GetSemiFilledBenchmark {
     @Benchmark
     public void getFromSkipListMap() throws Exception {
         get(SKIPLIST_TYPED_MAP);
+    }
+    
+    @Benchmark
+    public void getFromAMap() throws Exception {
+        get(A_MAP);
     }
     
     @Benchmark
