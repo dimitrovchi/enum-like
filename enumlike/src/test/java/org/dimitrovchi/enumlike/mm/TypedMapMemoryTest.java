@@ -17,12 +17,12 @@ package org.dimitrovchi.enumlike.mm;
 
 import org.dimitrovchi.enumlike.testutil.ObjectSizeOf;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import net.sf.ehcache.pool.sizeof.SizeOf;
 import net.sf.ehcache.pool.sizeof.filter.AnnotationSizeOfFilter;
-import org.apache.karaf.shell.table.HAlign;
-import org.apache.karaf.shell.table.ShellTable;
 import org.dimitrovchi.enumlike.ArrayTypedEnumMap;
 import org.dimitrovchi.enumlike.ConcurrentTypedEnumMap;
 import org.dimitrovchi.enumlike.DefaultEnumMapKeyContainer;
@@ -36,7 +36,6 @@ import org.dimitrovchi.enumlike.data.TestEnumMapKey;
 import org.dimitrovchi.enumlike.data.TestEnumMapKeyContainer;
 import org.dimitrovchi.enumlike.data.TestEnums;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -50,14 +49,15 @@ import org.junit.runners.Parameterized;
 public class TypedMapMemoryTest {
 
     private static final SizeOf SIZE_OF = new ObjectSizeOf(new AnnotationSizeOfFilter(), true);
-    private static final ShellTable RESULTS = new ShellTable();
-    private static final DefaultEnumMapKeyContainer<TestEnumMapKey> CONTAINER = new DefaultEnumMapKeyContainer<>(TestEnumMapKey.class, TestEnums.class);
+    private static final DefaultEnumMapKeyContainer<TestEnumMapKey> CONTAINER
+            = new DefaultEnumMapKeyContainer<>(TestEnumMapKey.class, TestEnums.class);
+    private static final List<Record> RECORDS = new ArrayList<>();
 
     @Parameterized.Parameters
     public static Collection<Object[]> parameters() {
         final List<Object[]> parameters = new ArrayList<>();
-        for (final int size : new int[] {7, 9, 16, 35, 50, 70}) {
-            for (final int capacity : new int[] {16, 32, 64, 70}) {
+        for (final int size : new int[] {9, 50, 70}) {
+            for (final int capacity : new int[] {16, 64, 70}) {
                 if (size <= capacity) {
                     parameters.add(new Object[] {new HashTypedMap(capacity), capacity, size});
                     parameters.add(new Object[] {new IdentityHashTypedMap(capacity), capacity, size});
@@ -72,7 +72,7 @@ public class TypedMapMemoryTest {
         }
         return parameters;
     }
-    
+
     private final TypedMap map;
     private final int capacity;
     private final int size;
@@ -83,21 +83,41 @@ public class TypedMapMemoryTest {
         this.size = size;
     }
 
-    @BeforeClass
-    public static void init() {
-        RESULTS.column("Map").align(HAlign.left);
-        RESULTS.column("Capacity").align(HAlign.right);
-        RESULTS.column("Size").align(HAlign.right);
-        RESULTS.column("Amount").align(HAlign.right);
-    }
-
     @AfterClass
-    public static void results() {
-        synchronized (System.out) {
-            System.out.println();
-            RESULTS.print(System.out);
-            System.out.println();
-        }
+    public static void printStatistics() {
+        final List<Class<?>> classes = RECORDS.stream()
+                .map(r -> r.mapClass).distinct().collect(Collectors.toList());
+        final int[] widths = new int[classes.size() + 2];
+        Arrays.fill(widths, 10);
+        final String format = Arrays.stream(widths)
+                .mapToObj(w -> "%" + w + "s")
+                .collect(Collectors.joining("|", "|", "|%n"));
+        final Object[] header = new Object[widths.length];
+        header[0] = "Capacity";
+        header[1] = "Size";
+        System.arraycopy(classes.stream()
+                .map(c -> c.getSimpleName().substring(0, 2)).toArray(), 0, header, 2, classes.size());
+        System.out.printf(format, header);
+        System.out.printf(format, Arrays.stream(widths)
+                .mapToObj(w -> {
+                    final char[] chars = new char[w];
+                    Arrays.fill(chars, '-');
+                    return String.valueOf(chars);
+                }).toArray());
+        RECORDS.stream().mapToInt(r -> r.capacity).filter(capacity -> capacity != 0).sorted().distinct()
+                .forEach(capacity -> RECORDS.stream().mapToInt(r -> r.size).filter(size -> size <= capacity).sorted().distinct()
+                        .forEach(size -> {
+                            final Object[] amounts = classes.stream().map(c -> RECORDS.stream()
+                                    .filter(r -> r.mapClass == c && r.size == size && (r.capacity == 0 || r.capacity == capacity))
+                                    .map(r -> r.amount)
+                                    .findFirst().get()).toArray();
+                            final Object[] row = new Object[widths.length];
+                            row[0] = capacity;
+                            row[1] = size;
+                            System.arraycopy(amounts, 0, row, 2, amounts.length);
+                            System.out.printf(format, row);
+                        })
+                );
     }
 
     @Test
@@ -106,11 +126,21 @@ public class TypedMapMemoryTest {
         for (int i = 0; i < size; i++) {
             map.put(CONTAINER.getElements().get(i), 300);
         }
-        RESULTS.addRow().addContent(
-                map.getClass().getSimpleName(),
-                capacity,
-                size,
-                SIZE_OF.deepSizeOf(Integer.MAX_VALUE, true, map).getCalculated()
-        );
+        RECORDS.add(new Record(map.getClass(), capacity, size, SIZE_OF.deepSizeOf(Integer.MAX_VALUE, true, map).getCalculated()));
+    }
+
+    public static class Record {
+
+        public final Class<?> mapClass;
+        public final int capacity;
+        public final int size;
+        public final long amount;
+
+        public Record(Class<?> mapClass, int capacity, int size, long amount) {
+            this.mapClass = mapClass;
+            this.capacity = capacity;
+            this.size = size;
+            this.amount = amount;
+        }
     }
 }
