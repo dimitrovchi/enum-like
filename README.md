@@ -18,3 +18,15 @@ Map types:
 * Tr - TreeMap based
 * Sk - ConcurrentSkipListMap-based
 * Ar - sorted arrays map
+
+# Performance
+
+## Put operation
+
+| Map | Time, ns |
+| Ha  |  32.121  |
+| Co  |  14.271  |
+| Sk  |  97.286  |
+| Tr  |  43.881  |
+| Ty  |   7.180  |
+| Ar  | 145.274  |
