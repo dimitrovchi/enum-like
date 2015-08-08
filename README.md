@@ -12,7 +12,7 @@ TypedEnumMap           |       64 |    9 |    440
 ConcurrentTypedEnumMap |       64 |    9 |    456
 HashTypedMap           |       70 |    9 |   1024
 IdentityHashTypedMap   |       70 |    9 |   1240
-TypedEnumMap           |       70 |    9 |    464
+*TypedEnumMap*           |       70 |    9 |    464
 ConcurrentTypedEnumMap |       70 |    9 |    480
 TreeTypedMap           |        0 |    9 |    568
 SkipListTypedMap       |        0 |    9 |    592
