@@ -19,14 +19,21 @@ Map types:
 * Sk - ConcurrentSkipListMap-based
 * Ar - sorted arrays map
 
+Oracle JVM 1.8u51, Linux x86_64
+
 # Performance
 
 | Map | 'Put' Time, ns | 'Get' Time, ns |
 |-----|----------------|----------------|
 | Ha  |        32.121  |       16.670   |
-| Id  |             -  |       16.265   |
+| Id  |           N/A  |       16.265   |
 | Co  |        14.271  |       10.397   |
 | Sk  |        97.286  |       52.521   |
 | Tr  |        43.881  |       36.639   |
 | Ty  |         7.180  |        9.509   |
 | Ar  |       145.274  |       59.877   |
+
+Oracle JVM 1.8u51, Linux x86_64
+
+CPU: AMD FX-8350 4.0 GHz 8-core L1 96 KiB L2 2048 KiB L3 8192 KiB
+RAM: DDR3 16 GiB non-ECC 1866 MHz
