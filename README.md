@@ -34,6 +34,5 @@ Oracle JVM 1.8u51, Linux x86_64
 | Ar  |       145.274  |       59.877   |
 
 Oracle JVM 1.8u51, Linux x86_64
-
 CPU: AMD FX-8350 4.0 GHz 8-core L1 96 KiB L2 2048 KiB L3 8192 KiB
 RAM: DDR3 16 GiB non-ECC 1866 MHz
