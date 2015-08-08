@@ -18,6 +18,7 @@ package org.dimitrovchi.enumlike;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import org.dimitrovchi.enumlike.base.TypedKey;
 import org.dimitrovchi.enumlike.base.TypedMap;
 
@@ -51,11 +52,8 @@ public class ArrayTypedEnumMap implements TypedMap {
 
     @Override
     public <K extends TypedKey<V>, V> V get(K key) {
-        try {
-            return key.getType().cast(values[binarySearch(keys, key)]);
-        } catch (IndexOutOfBoundsException x) {
-            return null;
-        }
+        final int index = binarySearch(keys, key);
+        return index >= 0 ? key.getType().cast(values[index]) : null;
     }
 
     @Override
@@ -63,29 +61,21 @@ public class ArrayTypedEnumMap implements TypedMap {
         if (value == null) {
             return remove(key);
         } else {
-            final int index = binarySearch(keys, key);
+            int index = binarySearch(keys, key);
             if (index >= 0) {
                 final Object old = values[index];
                 values[index] = value;
                 return key.getType().cast(old);
             } else {
-                final int ip = -(index + 1);
-                final int n = size();
-                if (n == 0) {
-                    keys = new TypedKey<?>[] {key};
-                    values = new Object[] {value};
-                } else if (ip == n) {
-                    keys = Arrays.copyOf(keys, n + 1);
-                    values = Arrays.copyOf(values, n + 1);
-                    keys[n] = key;
-                    values[n] = value;
-                } else {
-                    keys = Arrays.copyOf(keys, n + 1);
-                    values = Arrays.copyOf(values, n + 1);
-                    System.arraycopy(keys, ip, keys, ip + 1, n - ip);
-                    System.arraycopy(values, ip, values, ip + 1, n - ip);
-                    keys[ip] = key;
-                    values[ip] = value;
+                index = -(index + 1);
+                final int n = keys.length;
+                keys = Arrays.copyOf(keys, n + 1);
+                values = Arrays.copyOf(values, n + 1);
+                keys[index] = key;
+                values[index] = value;
+                if (index != n) {
+                    System.arraycopy(keys, index, keys, index + 1, n - index);
+                    System.arraycopy(values, index, values, index + 1, n - index);
                 }
                 return null;
             }
@@ -98,15 +88,12 @@ public class ArrayTypedEnumMap implements TypedMap {
         if (index >= 0) {
             final Object old = values[index];
             final int n = size() - 1;
-            if (index == n) {
-                keys = Arrays.copyOf(keys, n);
-                values = Arrays.copyOf(values, n);
-            } else {
+            if (index != n) {
                 System.arraycopy(keys, index + 1, keys, index, n - index);
                 System.arraycopy(values, index + 1, values, index, n - index);
-                keys = Arrays.copyOf(keys, n);
-                values = Arrays.copyOf(values, n);
             }
+            keys = Arrays.copyOf(keys, n);
+            values = Arrays.copyOf(values, n);
             return key.getType().cast(old);
         } else {
             return null;
@@ -133,7 +120,7 @@ public class ArrayTypedEnumMap implements TypedMap {
         return map;
     }
     
-    private static int binarySearch(Object[] a, Object key) {
+    private static int binarySearch(@Nonnull Object[] a, @Nonnull Object key) {
         int low = 0;
         int high = a.length - 1;
         while (low <= high) {

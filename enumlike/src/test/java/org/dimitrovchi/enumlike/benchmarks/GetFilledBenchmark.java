@@ -28,7 +28,6 @@ import org.dimitrovchi.enumlike.collections.HashTypedMap;
 import org.dimitrovchi.enumlike.collections.IdentityHashTypedMap;
 import org.dimitrovchi.enumlike.collections.SkipListTypedMap;
 import org.dimitrovchi.enumlike.collections.TreeTypedMap;
-import org.dimitrovchi.enumlike.data.TestCommonsEnumMapKey;
 import org.dimitrovchi.enumlike.data.TestEnumMapKey;
 import org.dimitrovchi.enumlike.data.TestEnums;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -47,7 +46,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
  * Benchmark 1.
- * 
+ *
  * @author Dmitry Ovchinnikov
  */
 @State(Scope.Benchmark)
@@ -62,12 +61,12 @@ public class GetFilledBenchmark {
 
     public static final int BATCH = 10_000;
     private static final int CAPACITY = 70;
-    private static final EnumMapKeyContainer<TestEnumMapKey> CONTAINER = 
+    private static final EnumMapKeyContainer<TestEnumMapKey> CONTAINER =
             new DefaultEnumMapKeyContainer<>(TestEnumMapKey.class, TestEnums.class);
-    
-    private static final TestEnumMapKey[] KEYS = 
+
+    private static final TestEnumMapKey[] KEYS =
             CONTAINER.getElements().toArray(new TestEnumMapKey[CAPACITY]);
-    
+
     private static final TypedMap ENUM_MAP = new TypedEnumMap(CONTAINER);
     private static final TypedMap C_ENUM_MAP = new ConcurrentTypedEnumMap(CONTAINER);
     private static final TypedMap HASH_TYPED_MAP = new HashTypedMap(CAPACITY);
@@ -75,21 +74,9 @@ public class GetFilledBenchmark {
     private static final TypedMap TREE_TYPED_MAP = new TreeTypedMap();
     private static final TypedMap SKIPLIST_TYPED_MAP = new SkipListTypedMap();
     private static final TypedMap A_MAP = new ArrayTypedEnumMap();
-    
-    private static final TestCommonsEnumMapKey[] STR_KEYS = new TestCommonsEnumMapKey[CAPACITY];
-    
-    private static final TypedMap STR_HASH_MAP = new HashTypedMap(CAPACITY);
-    private static final TypedMap I_STR_HASH_MAP = new IdentityHashTypedMap(CAPACITY);
-    
+
     static {
         final Random random = new Random(0L);
-        for (int i = 0; i < CAPACITY; i++) {
-            final String k = Integer.toString(random.nextInt(1_000_000), Character.MAX_RADIX) + i;
-            final TestCommonsEnumMapKey<Integer> key = new TestCommonsEnumMapKey(k, Integer.class, 0);
-            STR_KEYS[i] = key;
-            STR_HASH_MAP.put(key, random.nextInt());
-            I_STR_HASH_MAP.put(key, random.nextInt());
-        }
         for (final TestEnumMapKey k : CONTAINER.getElements()) {
             ENUM_MAP.put(k, random.nextInt());
             C_ENUM_MAP.put(k, random.nextInt());
@@ -100,71 +87,55 @@ public class GetFilledBenchmark {
             A_MAP.put(k, random.nextInt());
         }
     }
-        
+
     @Benchmark
     public void getFromEnumMap() throws Exception {
         get(ENUM_MAP);
     }
-    
+
     @Benchmark
     public void getFromCEnumMap() throws Exception {
         get(C_ENUM_MAP);
     }
-    
+
     @Benchmark
     public void getFromHashMap() throws Exception {
         get(HASH_TYPED_MAP);
     }
-    
+
     @Benchmark
     public void getFromIHashMap() throws Exception {
         get(I_HASH_TYPED_MAP);
     }
-    
+
     @Benchmark
     public void getFromTreeMap() throws Exception {
         get(TREE_TYPED_MAP);
     }
-    
+
     @Benchmark
     public void getFromSkipListMap() throws Exception {
         get(SKIPLIST_TYPED_MAP);
     }
-    
+
     @Benchmark
     public void getFromAMap() throws Exception {
         get(A_MAP);
     }
-    
-    @Benchmark
-    public void getFromStrHashMap() throws Exception {
-        getStr(STR_HASH_MAP);
-    }
-    
-    @Benchmark
-    public void getFromStrIHashMap() throws Exception {
-        getStr(I_STR_HASH_MAP);
-    }
-    
+
     private void get(TypedMap map) {
         for (int i = 0; i < CAPACITY; i++) {
             sink((Integer) map.get(KEYS[i]));
         }
     }
-    
-    private void getStr(TypedMap map) {
-        for (int i = 0; i < CAPACITY; i++) {
-            sink((Integer) map.get(STR_KEYS[i]));
-        }
-    }
-    
+
     @CompilerControl(CompilerControl.Mode.DONT_INLINE)
     public static void sink(Integer value) {
     }
-    
+
     public static void main(String... args) throws Exception {
         new Runner(new OptionsBuilder()
-                .jvmArgsAppend("-XX:+UseG1GC", "-D" + AbstractTypedEnumMap.FAST_KEY)
+                .jvmArgsAppend("-D" + AbstractTypedEnumMap.FAST_KEY)
                 .include(GetFilledBenchmark.class.getSimpleName())
                 .build()).run();
     }

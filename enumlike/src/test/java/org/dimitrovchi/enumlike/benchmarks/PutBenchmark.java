@@ -43,7 +43,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 /**
  * Put benchmark.
- * 
+ *
  * @author Dmitry Ovchinnikov
  */
 @State(Scope.Benchmark)
@@ -55,16 +55,16 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @OperationsPerInvocation(PutBenchmark.CAPACITY * PutBenchmark.BATCH)
 @SuppressWarnings("unchecked")
 public class PutBenchmark {
-    
+
     public static final int BATCH = 10_000;
     public static final int CAPACITY = 70;
     private static final EnumMapKeyContainer<TestEnumMapKey> CONTAINER
             = new DefaultEnumMapKeyContainer<>(TestEnumMapKey.class, TestEnums.class);
     private static final TestEnumMapKey[] KEYS
             = CONTAINER.getElements().toArray(new TestEnumMapKey[CAPACITY]);
-    
+
     private final Blackhole bh = new Blackhole();
-    
+
     @Benchmark
     public void putToAMap() {
         final ArrayTypedEnumMap map = new ArrayTypedEnumMap();
@@ -72,7 +72,7 @@ public class PutBenchmark {
             bh.consume(map.put(KEYS[i], i));
         }
     }
-    
+
     @Benchmark
     public void putToHashMap() {
         final HashTypedMap map = new HashTypedMap(32);
@@ -80,7 +80,7 @@ public class PutBenchmark {
             bh.consume(map.put(KEYS[i], i));
         }
     }
-    
+
     @Benchmark
     public void putToTreeMap() {
         final TreeTypedMap map = new TreeTypedMap();
@@ -88,7 +88,7 @@ public class PutBenchmark {
             bh.consume(map.put(KEYS[i], i));
         }
     }
-    
+
     @Benchmark
     public void putToSkipListMap() {
         final SkipListTypedMap map = new SkipListTypedMap();
@@ -96,7 +96,7 @@ public class PutBenchmark {
             bh.consume(map.put(KEYS[i], i));
         }
     }
-    
+
     @Benchmark
     public void putToEnumMap() {
         final TypedEnumMap map = new TypedEnumMap(CONTAINER);
@@ -104,7 +104,7 @@ public class PutBenchmark {
             bh.consume(map.put(KEYS[i], i));
         }
     }
-    
+
     @Benchmark
     public void putToCEnumMap() {
         final ConcurrentTypedEnumMap map = new ConcurrentTypedEnumMap(CONTAINER);
@@ -112,10 +112,10 @@ public class PutBenchmark {
             bh.consume(map.put(KEYS[i], i));
         }
     }
-    
+
     public static void main(String... args) throws Exception {
         new Runner(new OptionsBuilder()
-                .jvmArgsAppend("-XX:+UseG1GC", "-D" + AbstractTypedEnumMap.FAST_KEY)
+                .jvmArgsAppend("-D" + AbstractTypedEnumMap.FAST_KEY)
                 .include(PutBenchmark.class.getSimpleName())
                 .build()).run();
     }
