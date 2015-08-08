@@ -24,6 +24,7 @@ Map types:
 ## Put operation
 
 | Map | Time, ns |
+|-----|----------|
 | Ha  |  32.121  |
 | Co  |  14.271  |
 | Sk  |  97.286  |
