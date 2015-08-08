@@ -1,8 +1,8 @@
 # Memory consumption
 
-Map                    | Capacity | Size | Amount
--------------------------------------------------
-HashTypedMap           |       16 |    7 |    480
+| Map                    | Capacity | Size | Amount |
+|------------------------|----------|------|--------|
+| HashTypedMap           |       16 |    7 |    480 |
 IdentityHashTypedMap   |       16 |    7 |    440
 TypedEnumMap           |       16 |    7 |    216
 ConcurrentTypedEnumMap |       16 |    7 |    232
