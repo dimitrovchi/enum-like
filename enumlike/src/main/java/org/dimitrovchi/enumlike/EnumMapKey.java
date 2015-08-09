@@ -15,41 +15,27 @@
  */
 package org.dimitrovchi.enumlike;
 
-import org.dimitrovchi.enumlike.base.DefaultValueSupplier;
-import org.dimitrovchi.enumlike.base.DefaultValue;
 import org.dimitrovchi.enumlike.base.TypedKey;
 import javax.annotation.Nonnull;
 
 /**
  * Enum-like map key.
- * 
+ *
  * @param <V> Value type.
- * 
+ *
  * @author Dmitry Ovchinnikov
  */
 public abstract class EnumMapKey<V> extends Enum implements TypedKey<V> {
-    
+
     private final Class<V> type;
-    private final DefaultValueSupplier<V> defaultValueSupplier;
-    
+
     /**
      * Constructs an enum-map key.
-     * 
+     *
      * @param type Value type.
-     * @param defaultValueSupplier Default value supplier.
      */
-    public EnumMapKey(@Nonnull Class<V> type, @Nonnull DefaultValueSupplier<V> defaultValueSupplier) {
+    public EnumMapKey(@Nonnull Class<V> type) {
         this.type = type;
-        this.defaultValueSupplier = defaultValueSupplier;
-    }
-        
-    /**
-     * Constructs an enum-map key.
-     * 
-     * @param valueType Value type.
-     */
-    public EnumMapKey(@Nonnull Class<V> valueType) {
-        this(valueType, DefaultValue.<V>nullValueSupplier());
     }
 
     /**
@@ -60,16 +46,5 @@ public abstract class EnumMapKey<V> extends Enum implements TypedKey<V> {
     @Nonnull
     public final Class<V> getType() {
         return type;
-    }
-    
-    /**
-     * Get default value supplier.
-     * 
-     * @return Default value supplier.
-     */
-    @Override
-    @Nonnull
-    public final DefaultValueSupplier<V> getDefaultValueSupplier() {
-        return defaultValueSupplier;
     }
 }

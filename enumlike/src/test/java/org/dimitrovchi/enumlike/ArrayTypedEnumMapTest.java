@@ -21,11 +21,11 @@ import org.junit.Test;
 
 /**
  * Array typed enum map test.
- * 
+ *
  * @author Dmitry Ovchinnikov
  */
 public class ArrayTypedEnumMapTest {
-            
+
     @Test
     public void testPut() {
         final ArrayTypedEnumMap map = new ArrayTypedEnumMap();
@@ -43,9 +43,9 @@ public class ArrayTypedEnumMapTest {
         Assert.assertEquals(23, (int) map.get(Enums.K4));
         System.out.println(map.toMap());
     }
-    
+
     public interface Enums {
-        
+
         Key K1 = new Key();
         Key K2 = new Key();
         Key K3 = new Key();
@@ -53,17 +53,11 @@ public class ArrayTypedEnumMapTest {
         Key K5 = new Key();
         Key K6 = new Key();
     }
-    
-    @SuppressWarnings("EqualsAndHashcode")
+
     public static class Key extends TestEnumMapKey<Integer> {
 
         public Key() {
             super(Integer.class);
-        }
-
-        @Override
-        public int hashCode() {
-            return ordinal();
         }
     }
 }

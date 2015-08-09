@@ -17,24 +17,19 @@ package org.dimitrovchi.enumlike.data;
 
 import net.sf.ehcache.pool.sizeof.annotations.IgnoreSizeOf;
 import org.dimitrovchi.enumlike.EnumMapKey;
-import org.dimitrovchi.enumlike.base.DefaultValueSupplier;
 
 /**
  * Test enum map key.
- * 
+ *
  * @param <T> Value type.
- * 
+ *
  * @author Dmitry Ovchinnikov
  */
 @IgnoreSizeOf
 public class TestEnumMapKey<T> extends EnumMapKey<T> implements Comparable<TestEnumMapKey<T>> {
 
-    public TestEnumMapKey(Class<T> type, DefaultValueSupplier<T> defaultValueSupplier) {
-        super(type, defaultValueSupplier);
-    }
-
-    public TestEnumMapKey(Class<T> valueType) {
-        super(valueType);
+    public TestEnumMapKey(Class<T> type) {
+        super(type);
     }
 
     @Override

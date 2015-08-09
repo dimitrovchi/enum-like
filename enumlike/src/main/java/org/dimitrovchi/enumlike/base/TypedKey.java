@@ -17,28 +17,22 @@ package org.dimitrovchi.enumlike.base;
 
 /**
  * Typed key.
- * 
+ *
  * @param <V> Value type.
- * 
+ *
  * @author Dmitry Ovchinnikov
  */
 public interface TypedKey<V> {
-    
+
     /**
      * Get key name.
      * @return Key name.
      */
     String name();
-    
+
     /**
      * Get key value type.
      * @return Key value type.
      */
     Class<V> getType();
-    
-    /**
-     * Get default value supplier.
-     * @return Default value supplier.
-     */
-    DefaultValueSupplier<V> getDefaultValueSupplier();
 }
