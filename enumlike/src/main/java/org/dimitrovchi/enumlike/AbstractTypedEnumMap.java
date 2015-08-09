@@ -23,22 +23,22 @@ import org.dimitrovchi.enumlike.base.TypedMap;
 
 /**
  * Abstract typed enum map.
- * 
+ *
  * @author Dmitry Ovchinnikov
  */
 public abstract class AbstractTypedEnumMap implements TypedMap {
-    
-    public static final String FAST_KEY = AbstractTypedEnumMap.class.getName() + ".FAST";
+
+    public static final String FAST_KEY = "TypedEnumMap.fast";
     private static final boolean FAST = System.getProperties().containsKey(FAST_KEY);
-    
+
     protected final EnumMapKeyContainer<? extends EnumMapKey> enumContainer;
-    
+
     public AbstractTypedEnumMap(@Nonnull EnumMapKeyContainer<? extends EnumMapKey> enumContainer) {
         this.enumContainer = enumContainer;
     }
-    
+
     protected abstract int fullSize();
-        
+
     protected final EnumMapKey<?> key(TypedKey<?> key) {
         try {
             if (FAST) {
