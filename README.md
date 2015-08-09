@@ -1,5 +1,15 @@
 # Usage
 
+## Maven-dependency
+
+```xml
+<dependency>
+    <groupId>org.marid</groupId>
+    <artifactId>enumlike</artifactId>
+    <version>0.1.4</version>
+</dependency>
+```
+
 ## Demo
 
 ```java
