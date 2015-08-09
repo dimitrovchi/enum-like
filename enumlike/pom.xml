@@ -201,6 +201,21 @@ limitations under the License.
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.9.4</version>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <goals>deploy</goals>
+                    <username>eosms</username>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
