@@ -25,7 +25,7 @@ limitations under the License.
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Enum-like maps and keys</name>
+    <name>enumlike</name>
     <description>Memory efficient enum-like map and key implementations</description>
     <url>https://github.com/dimitrovchi/enum-like</url>
 
@@ -245,9 +245,13 @@ limitations under the License.
 
     <developers>
         <developer>
-            <id>dimitrovchi</id>
+            <id>dmovc</id>
             <name>Dmitry Ovchinnikov</name>
+            <timezone>+3</timezone>
             <email>d.ovchinnikow@gmail.com</email>
+            <roles>
+                <role>Project Lead</role>
+            </roles>
         </developer>
     </developers>
 </project>
