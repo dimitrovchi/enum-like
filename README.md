@@ -98,3 +98,8 @@ Oracle JVM 1.8u51, Linux x86_64
 - Oracle JVM 1.8u51, Linux x86_64, Kernel V3.19
 - CPU: AMD FX-8350 4.0 GHz 8-core L1 96 KiB L2 2048 KiB L3 8192 KiB
 - RAM: DDR3 16 GiB non-ECC 1866 MHz
+
+These benchmarks were done with -DTypedEnumMap.fast flag. This flag disables domain-based ordinal id checking and so dramatically increases the performance. For example, without this flag, we have the following:
+
+Co : get - <font color='red'>106 ns</font>
+Ty : get - <font color='red'>105 ns</font>
