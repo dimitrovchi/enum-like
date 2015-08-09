@@ -1,5 +1,7 @@
 # Usage
 
+## Demo
+
 ```java
 public class TypedEnumMapDemoTest {
 
@@ -59,6 +61,18 @@ public class TypedEnumMapDemoTest {
         assertNull(map.get(MyEnum.ENUM_STR_KEY));
     }
 ```
+
+## Enum container
+
+Typed enum map         | Is an enum container needed?
+-----------------------|-----------------------------
+ArrayTypedEnumMap      | no
+ConcurrentTypedEnumMap | yes
+TypedEnumMap           | yes
+HashTypedMap           | no
+IdentityHashTypedMap   | no
+SkipListTYpedMap       | no
+TreeTypedMap           | no
 
 # Memory consumption
 
