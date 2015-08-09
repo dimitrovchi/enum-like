@@ -13,12 +13,8 @@ public class TypedEnumMapDemoTest {
      */
     public static class MyKey<T> extends EnumMapKey<T> {
 
-        public MyKey(Class<T> type, DefaultValueSupplier<T> defaultValueSupplier) {
-            super(type, defaultValueSupplier);
-        }
-
-        public MyKey(Class<T> valueType) {
-            super(valueType);
+        public MyKey(Class<T> type) {
+            super(type);
         }
     }
 
@@ -27,8 +23,8 @@ public class TypedEnumMapDemoTest {
      */
     public interface MyEnum {
 
-        MyKey<Integer> ENUM_INT_KEY = new MyKey<>(Integer.class, new DefaultValue<>(0));
-        MyKey<String> ENUM_STR_KEY = new MyKey<>(String.class, () -> "");
+        MyKey<Integer> ENUM_INT_KEY = new MyKey<>(Integer.class);
+        MyKey<String> ENUM_STR_KEY = new MyKey<>(String.class);
         MyKey<BigDecimal> ENUM_BD_KEY = new MyKey<BigDecimal>(BigDecimal.class) {
             @Override
             public String name() {
@@ -62,7 +58,6 @@ public class TypedEnumMapDemoTest {
         assertEquals(10, map.get(MyEnum.ENUM_BD_KEY).intValue());
         assertNull(map.get(MyEnum.ENUM_STR_KEY));
     }
-}
 ```
 
 # Memory consumption
