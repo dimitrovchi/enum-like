@@ -64,8 +64,8 @@ public class TypedEnumMapDemoTest {
 
 ## Enum container
 
-Typed enum map         | Is an enum container needed
------------------------|----------------------------
+Typed enum map         | Is an enum container needed?
+-----------------------|-----------------------------
 ArrayTypedEnumMap      | no
 ConcurrentTypedEnumMap | yes
 TypedEnumMap           | yes
