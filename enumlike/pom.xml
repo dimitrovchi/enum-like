@@ -25,6 +25,10 @@ limitations under the License.
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>Enum-like maps and keys</name>
+    <description>Memory efficient enum-like map and key implementations</description>
+    <url>https://github.com/dimitrovchi/enum-like</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -238,4 +242,12 @@ limitations under the License.
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <id>dimitrovchi</id>
+            <name>Dmitry Ovchinnikov</name>
+            <email>d.ovchinnikow@gmail.com</email>
+        </developer>
+    </developers>
 </project>
