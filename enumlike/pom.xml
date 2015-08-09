@@ -20,7 +20,7 @@ limitations under the License.
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.dimitrovchi</groupId>
     <artifactId>enumlike</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -227,7 +227,7 @@ limitations under the License.
         <connection>scm:git:https://github.com/dimitrovchi/enum-like.git</connection>
         <developerConnection>scm:git:https://github.com/dimitrovchi/enum-like.git</developerConnection>
         <url>https://github.com/dimitrovchi/enum-like.git</url>
-        <tag>enumlike-0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <licenses>
