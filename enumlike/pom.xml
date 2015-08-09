@@ -213,7 +213,6 @@ limitations under the License.
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <goals>deploy</goals>
-                    <username>eosms</username>
                 </configuration>
             </plugin>
         </plugins>
@@ -225,6 +224,13 @@ limitations under the License.
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <scm>
+        <connection>scm:git:https://github.com/dimitrovchi/enum-like.git</connection>
+        <developerConnection>scm:git:https://github.com/dimitrovchi/enum-like.git</developerConnection>
+        <url>https://github.com/dimitrovchi/enum-like.git</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <licenses>
         <license>
